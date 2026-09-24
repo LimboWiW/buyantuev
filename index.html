@@ -133,7 +133,11 @@
     .wall-shelf::before, .wall-shelf::after { content: ""; position: absolute; bottom: 8px; border-radius: 50% 50% 35% 35%; }
     .wall-shelf::before { left: 14%; width: 28px; height: 46px; background: #c4785c; }
     .wall-shelf::after { left: 52%; width: 35px; height: 34px; background: #e1b95c; }
-    .floor { position: absolute; z-index: 2; inset: auto 0 0; height: 28%; background: repeating-linear-gradient(90deg, rgba(94,59,37,.18) 0 1px, transparent 1px 80px), linear-gradient(160deg, #d0aa82, var(--room-floor)); transform: perspective(470px) rotateX(35deg); transform-origin: bottom center; }
+    .floor { position: absolute; z-index: 2; inset: auto 0 0; height: 28%; background: repeating-linear-gradient(90deg, rgba(94,59,37,.18) 0 1px, transparent 1px 80px), linear-gradient(160deg, #d0aa82, var(--room-floor)); transform: perspective(470px) rotateX(35deg); transform-origin: bottom center; transition: background .35s ease; }
+    .floor.is-tile { background-color: var(--floor-color); background-image: linear-gradient(rgba(255,255,255,.56) 2px, transparent 2px), linear-gradient(90deg, rgba(255,255,255,.56) 2px, transparent 2px); background-size: 55px 55px; }
+    .floor.is-carpet { background-color: var(--floor-color); background-image: radial-gradient(rgba(70,55,45,.19) .8px, transparent .9px); background-size: 5px 5px; }
+    .floor.is-wood { background-color: var(--floor-color); background-image: repeating-linear-gradient(90deg, rgba(70,42,23,.23) 0 2px, transparent 2px 115px), repeating-linear-gradient(0deg, rgba(255,255,255,.18) 0 1px, transparent 1px 38px); }
+    .floor.is-laminate { background-color: var(--floor-color); background-image: repeating-linear-gradient(90deg, rgba(78,52,31,.2) 0 1px, transparent 1px 92px), repeating-linear-gradient(0deg, rgba(255,255,255,.13) 0 1px, transparent 1px 52px); }
     .floor::after { content: ""; position: absolute; top: 18px; width: 100%; border-top: 1px solid rgba(255,255,255,.3); }
     .furniture-shadow { position: absolute; z-index: 3; bottom: 15%; left: 50%; width: 47%; height: 42px; border-radius: 50%; background: rgba(59, 44, 32, .22); filter: blur(10px); transform: translateX(-50%); }
     .furniture-stage { position: absolute; z-index: 4; bottom: 14%; left: 50%; width: min(51%, 420px); height: 57%; transform: translateX(-50%); transition: width .3s ease, height .3s ease, transform .3s ease; }
@@ -171,10 +175,10 @@
     .furniture--tv .line.one { top: 0; left: 33.33%; width: 2px; height: 100%; }.furniture--tv .line.two { top: 0; left: 66.66%; width: 2px; height: 100%; }
     .furniture--tv .handle { width: 5px; height: 25px; top: calc(50% - 12px); }.furniture--tv .handle.one { left: calc(33.33% - 14px); }.furniture--tv .handle.two { left: calc(33.33% + 10px); }.furniture--tv .handle.three { left: calc(66.66% - 14px); }.furniture--tv .handle.four { left: calc(66.66% + 10px); }
     .furniture--tv .leg { bottom: -17px; transform: skewX(-16deg); }.furniture--tv .leg.a { left: 10%; }.furniture--tv .leg.b { right: 10%; }
-    .furniture--kitchen { width: 95%; height: 67%; }
+    .furniture--kitchen { width: 112%; height: 78%; left: -6%; }
     .furniture--kitchen .base, .furniture--kitchen .upper { position: absolute; left: 0; width: 100%; background: linear-gradient(90deg, color-mix(in srgb, currentColor 80%, #fff), currentColor 24%, color-mix(in srgb, currentColor 78%, #000)); border-radius: 3px; box-shadow: inset 0 9px rgba(255,255,255,.13), inset -10px 0 rgba(35,22,12,.12); }
-    .furniture--kitchen .base { bottom: 0; height: 48%; }
-    .furniture--kitchen .upper { top: 0; height: 35%; width: 72%; right: 0; left: auto; }
+    .furniture--kitchen .base { bottom: 0; height: 45%; }
+    .furniture--kitchen .upper { top: 0; height: 39%; width: 88%; right: 0; left: auto; }
     .furniture--kitchen .counter { position: absolute; z-index: 2; bottom: 46%; left: -2%; width: 104%; height: 9px; border-radius: 2px; background: #d0b08b; box-shadow: 0 3px 0 rgba(48,31,18,.22); }
     .furniture--kitchen .line { z-index: 3; width: 2px; height: 100%; background: rgba(58,42,28,.34); }
     .furniture--kitchen .line.a { left: 25%; }.furniture--kitchen .line.b { left: 50%; }.furniture--kitchen .line.c { left: 75%; }
@@ -182,6 +186,12 @@
     .furniture--kitchen .handle.two { left: calc(37.5% - 14px); }.furniture--kitchen .handle.three { left: calc(62.5% - 14px); }.furniture--kitchen .handle.four { left: calc(87.5% - 14px); }
     .furniture--kitchen .sink { position: absolute; z-index: 4; right: 11%; bottom: 49%; width: 17%; height: 20px; border: 3px solid #8a765f; border-radius: 4px; background: #b9c0bc; }
     .furniture--kitchen .stove { position: absolute; z-index: 4; left: 54%; bottom: 49%; width: 18%; height: 22px; border-radius: 3px; background: #2d3030; box-shadow: inset 0 0 0 3px #444, inset 8px 7px #171919; }
+    .furniture--kitchen .fridge { position: absolute; z-index: 4; right: -13%; bottom: 0; width: 17%; height: 92%; border-radius: 4px 4px 1px 1px; background: linear-gradient(90deg, #c5c7c4, #f0efeb 22%, #b9bbb9 100%); box-shadow: inset -5px 0 rgba(50,50,47,.13), 7px 7px 8px rgba(46,33,23,.16); }
+    .furniture--kitchen .fridge::before { content: ""; position: absolute; right: 12%; top: 28%; width: 3px; height: 30%; background: #6b6d68; border-radius: 3px; box-shadow: 0 88px #6b6d68; }
+    .furniture--kitchen .oven { position: absolute; z-index: 5; left: 28%; bottom: 9%; width: 19%; height: 33%; border: 4px solid #353635; border-radius: 2px; background: linear-gradient(#606361 0 18%, #202221 19% 75%, #555755 76%); }
+    .furniture--kitchen .oven::after { content: ""; position: absolute; left: 13%; right: 13%; top: 8%; height: 4px; border-radius: 3px; background: #c9cbc5; }
+    .furniture--kitchen .hood { position: absolute; z-index: 5; left: 53%; top: 34%; width: 18%; height: 10px; border-radius: 3px 3px 0 0; background: #535655; box-shadow: 0 7px 0 #383b39; }
+    .furniture--kitchen .dishwasher { position: absolute; z-index: 4; left: 5%; bottom: 9%; width: 18%; height: 33%; border-radius: 2px; background: linear-gradient(#c8cbc5 0 14%, #8d918c 15% 18%, #d4d6d0 19%); }
     .furniture--kitchen .leg { bottom: -14px; width: 7px; height: 15px; background: var(--furniture-dark); }.furniture--kitchen .leg.a { left: 6%; }.furniture--kitchen .leg.b { right: 6%; }
     .scene-caption { position: absolute; z-index: 8; left: 24px; bottom: 20px; max-width: 245px; padding: 12px 14px; color: #38443d; border-left: 3px solid var(--accent); background: rgba(255,255,255,.86); font-size: 11px; font-weight: 600; line-height: 1.5; backdrop-filter: blur(7px); }
 
@@ -481,7 +491,7 @@
             <div class="scene-label"><i></i><span>Предпросмотр интерьера</span></div>
             <div class="scene">
               <div class="wall" id="roomWall"><div class="wall-shelf"></div></div>
-              <div class="floor"></div>
+              <div class="floor" id="roomFloor"></div>
               <div class="furniture-shadow"></div>
               <div class="furniture-stage" id="furnitureStage" aria-label="Визуализация выбранной мебели"></div>
             </div>
@@ -526,6 +536,16 @@
                 <button class="type-chip" type="button" data-wall-type="tile">Плитка</button>
               </div>
               <div class="swatches color-wheel" id="wallSwatches" aria-label="Цвет стены" style="margin-top: 12px;"></div>
+            </div>
+            <div class="control-group">
+              <span class="control-label">Покрытие пола</span>
+              <div class="wall-type-row" id="floorTypes">
+                <button class="type-chip active" type="button" data-floor-type="laminate">Ламинат</button>
+                <button class="type-chip" type="button" data-floor-type="tile">Плитка</button>
+                <button class="type-chip" type="button" data-floor-type="carpet">Ковролин</button>
+                <button class="type-chip" type="button" data-floor-type="wood">Доска</button>
+              </div>
+              <div class="swatches color-wheel" id="floorSwatches" aria-label="Цвет пола" style="margin-top: 12px;"></div>
             </div>
             <div class="estimate" aria-live="polite">
               <span class="estimate-note">Ориентировочная цена</span>
@@ -623,10 +643,20 @@
       { id: "terracotta", label: "Терракота", hex: "#a95d47", extra: 0.1, dark: "#713829" }
     ];
     const wallColors = [
-      { id: "sand", label: "Песочный", hex: "#e6ded3" }, { id: "mist", label: "Серо-зелёный", hex: "#cbd7d1" },
-      { id: "blush", label: "Пыльная роза", hex: "#d9c5bf" }, { id: "cream", label: "Сливочный", hex: "#eee8d8" },
-      { id: "blue", label: "Голубой", hex: "#c2d3d9" }, { id: "white", label: "Белый", hex: "#f4f1e9" },
-      { id: "green", label: "Шалфей", hex: "#b7c6b3" }, { id: "yellow", label: "Солнечный", hex: "#eadcaa" }
+      { id: "sand", label: "Песочный", hex: "#e6ded3" }, { id: "mist", label: "Серо-зелёный", hex: "#cbd7d1" }, { id: "blush", label: "Пыльная роза", hex: "#d9c5bf" }, { id: "cream", label: "Сливочный", hex: "#eee8d8" },
+      { id: "white", label: "Белый", hex: "#f4f1e9" }, { id: "stone", label: "Каменный", hex: "#bebbb1" }, { id: "taupe", label: "Тауп", hex: "#b5a79c" }, { id: "peach", label: "Персиковый", hex: "#e8c0a9" },
+      { id: "red", label: "Красный", hex: "#d29b93" }, { id: "orange", label: "Абрикос", hex: "#e5b78f" }, { id: "yellow", label: "Солнечный", hex: "#eadcaa" }, { id: "mustard", label: "Горчичный", hex: "#d3c28b" },
+      { id: "green", label: "Шалфей", hex: "#b7c6b3" }, { id: "mint", label: "Мятный", hex: "#c1d9c9" }, { id: "teal", label: "Бирюзовый", hex: "#a7cbc5" }, { id: "blue", label: "Голубой", hex: "#c2d3d9" },
+      { id: "sky", label: "Небесный", hex: "#aec8df" }, { id: "navy", label: "Сине-серый", hex: "#9caebd" }, { id: "purple", label: "Лавандовый", hex: "#c5b5cf" }, { id: "pink", label: "Розовый", hex: "#e0b3bd" },
+      { id: "terracotta", label: "Терракота", hex: "#d29c85" }, { id: "olive", label: "Оливковый", hex: "#b9b991" }, { id: "charcoal", label: "Графитовый", hex: "#81857f" }, { id: "black", label: "Чёрный", hex: "#555755" }
+    ];
+    const floorColors = [
+      { id: "oak", label: "Светлый дуб", hex: "#c8a078" }, { id: "natural", label: "Натуральная доска", hex: "#a97b54" }, { id: "walnut", label: "Орех", hex: "#6f4b35" }, { id: "ash", label: "Ясень", hex: "#d2c1a9" },
+      { id: "white", label: "Белёный", hex: "#e5dfd1" }, { id: "grey", label: "Серый", hex: "#8f918b" }, { id: "graphite", label: "Графит", hex: "#444745" }, { id: "beige", label: "Бежевый", hex: "#c8b49a" },
+      { id: "red", label: "Красноватый", hex: "#9c5d48" }, { id: "orange", label: "Медовый", hex: "#bc7541" }, { id: "yellow", label: "Соломенный", hex: "#d1ad5e" }, { id: "green", label: "Зелёный", hex: "#70816d" },
+      { id: "mint", label: "Мятный", hex: "#9bb8aa" }, { id: "blue", label: "Синий", hex: "#617b8d" }, { id: "navy", label: "Тёмно-синий", hex: "#354655" }, { id: "purple", label: "Сливовый", hex: "#6e5b6b" },
+      { id: "pink", label: "Пыльно-розовый", hex: "#b98d8e" }, { id: "terracotta", label: "Терракота", hex: "#ad6e52" }, { id: "sand", label: "Песочный", hex: "#d2bc9a" }, { id: "concrete", label: "Бетон", hex: "#a4a39d" },
+      { id: "marble", label: "Мрамор", hex: "#d9d5ca" }, { id: "black", label: "Чёрный камень", hex: "#343534" }, { id: "honey", label: "Мёд", hex: "#b8823f" }, { id: "smoke", label: "Дымчатый", hex: "#777775" }
     ];
     const materials = {
       ldsp: { name: "ЛДСП стандарт", multiplier: 1 },
@@ -635,11 +665,12 @@
       enamel: { name: "МДФ эмаль матовая", multiplier: 1.42 },
       veneer: { name: "Шпон натуральный", multiplier: 1.56 }
     };
-    const defaultState = { product: "wardrobe", material: "ldsp", furnitureColor: "natural", wallColor: "sand", wallType: "paint", dimensions: { ...catalog.wardrobe.defaultDimensions } };
+    const defaultState = { product: "wardrobe", material: "ldsp", furnitureColor: "natural", wallColor: "sand", wallType: "paint", floorColor: "oak", floorType: "laminate", dimensions: { ...catalog.wardrobe.defaultDimensions } };
     let state = { ...defaultState };
 
     const furnitureStage = document.getElementById("furnitureStage");
     const roomWall = document.getElementById("roomWall");
+    const roomFloor = document.getElementById("roomFloor");
     const materialSelect = document.getElementById("materialSelect");
     const priceValue = document.getElementById("priceValue");
     const priceDetails = document.getElementById("priceDetails");
@@ -649,18 +680,21 @@
     function rubles(amount) { return new Intl.NumberFormat("ru-RU").format(amount) + " ₽"; }
     function createFurnitureMarkup(type) {
       if (type === "wardrobe") return '<div class="furniture furniture--wardrobe"><div class="body"></div><i class="line"></i><i class="line"></i><i class="handle one"></i><i class="handle two"></i><i class="handle three"></i><i class="handle four"></i><i class="leg a"></i><i class="leg b"></i></div>';
-      return '<div class="furniture furniture--kitchen"><div class="upper"></div><div class="base"></div><i class="counter"></i><i class="line a"></i><i class="line b"></i><i class="line c"></i><i class="handle one"></i><i class="handle two"></i><i class="handle three"></i><i class="handle four"></i><i class="sink"></i><i class="stove"></i><i class="leg a"></i><i class="leg b"></i></div>';
+      return '<div class="furniture furniture--kitchen"><div class="upper"></div><div class="base"></div><i class="counter"></i><i class="line a"></i><i class="line b"></i><i class="line c"></i><i class="handle one"></i><i class="handle two"></i><i class="handle three"></i><i class="handle four"></i><i class="sink"></i><i class="stove"></i><i class="hood"></i><i class="oven"></i><i class="dishwasher"></i><i class="fridge"></i><i class="leg a"></i><i class="leg b"></i></div>';
     }
     function renderSwatches() {
       const furnitureSwatches = document.getElementById("furnitureSwatches");
       furnitureSwatches.innerHTML = furnitureColors.map(color => '<button type="button" class="swatch ' + (state.furnitureColor === color.id ? "active" : "") + '" data-color="' + color.id + '" style="--swatch:' + color.hex + '" aria-label="Цвет мебели: ' + color.label + '" title="' + color.label + '"></button>').join("");
       const wallSwatches = document.getElementById("wallSwatches");
       wallSwatches.innerHTML = wallColors.map(color => '<button type="button" class="swatch ' + (state.wallColor === color.id ? "active" : "") + '" data-color="' + color.id + '" style="--swatch:' + color.hex + '" aria-label="Цвет стены: ' + color.label + '" title="' + color.label + '"></button>').join("");
+      const floorSwatches = document.getElementById("floorSwatches");
+      floorSwatches.innerHTML = floorColors.map(color => '<button type="button" class="swatch ' + (state.floorColor === color.id ? "active" : "") + '" data-color="' + color.id + '" style="--swatch:' + color.hex + '" aria-label="Цвет пола: ' + color.label + '" title="' + color.label + '"></button>').join("");
     }
     function render() {
       const product = catalog[state.product];
       const furnitureColor = furnitureColors.find(c => c.id === state.furnitureColor);
       const wallColor = wallColors.find(c => c.id === state.wallColor);
+      const floorColor = floorColors.find(c => c.id === state.floorColor);
       const material = materials[state.material];
       const { width, height, depth } = state.dimensions;
       const colorMultiplier = 1 + furnitureColor.extra;
@@ -670,16 +704,21 @@
       furnitureStage.innerHTML = createFurnitureMarkup(state.product);
       Object.entries(dimensionInputs).forEach(([key, input]) => { input.value = state.dimensions[key]; });
       furnitureStage.style.setProperty("--model-scale-width", Math.max(.78, Math.min(1.15, width / product.defaultDimensions.width)));
-      furnitureStage.style.transform = "translateX(-50%) scale(" + Math.max(.75, Math.min(1.12, width / product.defaultDimensions.width)) + ", " + Math.max(.75, Math.min(1.12, height / product.defaultDimensions.height)) + ")";
+      const depthScale = Math.max(.72, Math.min(1.18, depth / product.defaultDimensions.depth));
+      const depthAngle = (depthScale - 1) * -10;
+      furnitureStage.style.transform = "translateX(-50%) scale(" + Math.max(.75, Math.min(1.12, width / product.defaultDimensions.width)) + ", " + Math.max(.75, Math.min(1.12, height / product.defaultDimensions.height)) + ") rotateY(" + depthAngle + "deg)";
       document.documentElement.style.setProperty("--furniture-color", furnitureColor.hex);
       document.documentElement.style.setProperty("--furniture-dark", furnitureColor.dark);
       document.documentElement.style.setProperty("--wall-color", wallColor.hex);
+      document.documentElement.style.setProperty("--floor-color", floorColor.hex);
       roomWall.className = "wall" + (state.wallType === "paint" ? "" : " is-" + state.wallType);
+      roomFloor.className = "floor is-" + state.floorType;
       priceValue.textContent = "от " + rubles(total);
       priceDetails.textContent = product.name + " · " + width + " × " + depth + " × " + height + " мм · " + material.name;
       sceneCaption.textContent = product.name + " из " + material.name + " в оттенке «" + furnitureColor.label + "»";
       document.querySelectorAll(".product-tab").forEach(btn => btn.classList.toggle("active", btn.dataset.product === state.product));
       document.querySelectorAll(".type-chip").forEach(btn => btn.classList.toggle("active", btn.dataset.wallType === state.wallType));
+      document.querySelectorAll("[data-floor-type]").forEach(btn => btn.classList.toggle("active", btn.dataset.floorType === state.floorType));
       materialSelect.value = state.material;
       renderSwatches();
     }
@@ -712,6 +751,12 @@
     });
     document.getElementById("wallTypes").addEventListener("click", (event) => {
       const button = event.target.closest("[data-wall-type]"); if (!button) return; state.wallType = button.dataset.wallType; render();
+    });
+    document.getElementById("floorTypes").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-floor-type]"); if (!button) return; state.floorType = button.dataset.floorType; render();
+    });
+    document.getElementById("floorSwatches").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-color]"); if (!button) return; state.floorColor = button.dataset.color; render();
     });
     document.getElementById("resetButton").addEventListener("click", resetConfigurator);
     document.querySelectorAll(".faq-item button").forEach(button => button.addEventListener("click", () => {
