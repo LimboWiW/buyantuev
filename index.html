@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Каркас сайта корпусной мебели с интерактивным конфигуратором и ориентировочными ценами." />
+  <title>Форма дома — корпусная мебель на заказ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #1f2a25;
+      --muted: #69736e;
+      --paper: #f7f6f2;
+      --paper-deep: #eeece5;
+      --line: #deddd6;
+      --accent: #bf5a3f;
+      --accent-dark: #9d422d;
+      --forest: #2e5144;
+      --sage: #dfe8df;
+      --white: #ffffff;
+      --shadow: 0 22px 55px rgba(31, 42, 37, .11);
+      --radius: 22px;
+      --furniture-color: #b48a64;
+      --furniture-dark: #805a3e;
+      --wall-color: #e6ded3;
+      --room-floor: #b59270;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: "Manrope", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, select { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--accent); font-size: 11px; font-weight: 800;
+      letter-spacing: .14em; text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 22px; height: 1px; background: currentColor; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2 { font-family: "Playfair Display", Georgia, serif; letter-spacing: -.04em; }
+    h2 { font-size: clamp(34px, 4vw, 53px); line-height: 1.04; margin-bottom: 18px; }
+    .lead { color: var(--muted); font-size: 16px; line-height: 1.7; }
+
+    .site-header {
+      position: sticky; top: 0; z-index: 30; border-bottom: 1px solid rgba(222, 221, 214, .75);
+      background: rgba(247, 246, 242, .9); backdrop-filter: blur(12px);
+    }
+    .header-inner { min-height: 78px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 800; letter-spacing: -.04em; }
+    .brand-mark { position: relative; display: grid; place-items: center; width: 31px; height: 31px; border: 2px solid var(--forest); border-radius: 8px 8px 2px 2px; }
+    .brand-mark::before { content: ""; width: 10px; height: 15px; border: 2px solid var(--forest); border-bottom: 0; border-radius: 7px 7px 0 0; }
+    .brand-mark::after { content: ""; position: absolute; bottom: -5px; width: 36px; height: 2px; background: var(--forest); border-radius: 2px; }
+    .desktop-nav { display: flex; align-items: center; gap: clamp(14px, 2.3vw, 30px); color: var(--muted); font-size: 13px; font-weight: 700; }
+    .desktop-nav a { transition: color .2s; }
+    .desktop-nav a:hover { color: var(--accent); }
+    .header-cta, .button-primary, .button-ghost { display: inline-flex; align-items: center; justify-content: center; border: 0; border-radius: 100px; font-weight: 800; transition: transform .2s, background .2s, color .2s; }
+    .header-cta { min-height: 42px; padding: 0 18px; background: var(--forest); color: #fff; font-size: 12px; }
+    .header-cta:hover, .button-primary:hover { transform: translateY(-2px); background: #214237; }
+
+    .hero { position: relative; overflow: hidden; padding: clamp(58px, 9vw, 116px) 0 84px; }
+    .hero::before { content: ""; position: absolute; z-index: -1; top: -240px; right: -150px; width: 620px; height: 620px; border-radius: 50%; background: #e8eee7; }
+    .hero-grid { display: grid; grid-template-columns: 1.02fr .98fr; align-items: center; gap: 54px; }
+    h1 { max-width: 660px; margin-bottom: 22px; font-size: clamp(49px, 6.4vw, 82px); line-height: .98; }
+    h1 em { color: var(--accent); font-weight: inherit; }
+    .hero-copy .lead { max-width: 530px; margin-bottom: 30px; }
+    .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 13px; }
+    .button-primary { min-height: 54px; padding: 0 24px; background: var(--forest); color: #fff; font-size: 13px; }
+    .button-primary .arrow { margin-left: 12px; font-size: 18px; line-height: 0; }
+    .button-ghost { min-height: 52px; padding: 0 18px; color: var(--ink); border: 1px solid var(--line); background: transparent; font-size: 13px; }
+    .button-ghost:hover { background: var(--white); transform: translateY(-2px); }
+    .hero-note { display: flex; align-items: center; gap: 10px; margin-top: 32px; color: var(--muted); font-size: 12px; }
+    .hero-note svg { flex: 0 0 auto; color: var(--accent); }
+
+    .hero-card { position: relative; min-height: 430px; border-radius: 190px 190px 18px 18px; background: #d6e0d5; overflow: hidden; box-shadow: var(--shadow); }
+    .hero-card .sun { position: absolute; width: 170px; height: 170px; top: 50px; right: 54px; border-radius: 50%; background: #f0c975; opacity: .94; }
+    .hero-card .hero-window { position: absolute; left: 12%; top: 11%; width: 36%; height: 42%; border: 10px solid #f1eee4; border-bottom-width: 13px; background: linear-gradient(150deg, #c6e0e3, #d9eee9 56%, #a8c0a9 57%); box-shadow: 0 15px 0 rgba(87, 107, 91, .15); }
+    .hero-window::before, .hero-window::after { content: ""; position: absolute; background: rgba(241, 238, 228, .92); }
+    .hero-window::before { width: 5px; height: 100%; left: 50%; transform: translateX(-50%); }
+    .hero-window::after { height: 5px; width: 100%; top: 48%; }
+    .hero-plant { position: absolute; width: 80px; height: 125px; right: 7%; bottom: 50px; border-radius: 45% 45% 20% 20%; background: #779678; transform: rotate(9deg); }
+    .hero-plant::before, .hero-plant::after { content: ""; position: absolute; width: 59px; height: 93px; background: #668d71; border-radius: 65% 6% 65% 6%; }
+    .hero-plant::before { left: -35px; top: -21px; transform: rotate(-28deg); }
+    .hero-plant::after { right: -26px; top: -42px; transform: rotate(29deg); }
+    .hero-pot { position: absolute; z-index: 2; right: 8%; bottom: 0; width: 103px; height: 79px; clip-path: polygon(8% 0, 92% 0, 77% 100%, 23% 100%); background: #c96b4e; }
+    .hero-cabinet { position: absolute; bottom: 35px; left: 24%; width: 45%; height: 235px; border-radius: 3px 3px 1px 1px; background: #bb9068; box-shadow: inset 12px 0 0 rgba(255,255,255,.12), inset -11px 0 0 rgba(75,48,29,.1), 13px 18px 20px rgba(58,62,46,.17); }
+    .hero-cabinet::before { content: ""; position: absolute; left: 50%; top: 0; width: 2px; height: 100%; background: rgba(77, 48, 31, .32); }
+    .hero-cabinet::after { content: ""; position: absolute; width: 6px; height: 42px; border-radius: 10px; background: #3c453e; left: calc(50% - 16px); top: 96px; box-shadow: 26px 0 #3c453e; }
+    .hero-floor { position: absolute; height: 90px; inset: auto 0 0; background: repeating-linear-gradient(90deg, #aa805f 0 1px, transparent 1px 80px), #c29a75; transform: perspective(290px) rotateX(28deg); transform-origin: bottom; }
+    .hero-sticker { position: absolute; left: 5%; bottom: 40px; z-index: 4; padding: 12px 14px; color: var(--forest); border-radius: 14px; background: rgba(255,255,255,.9); box-shadow: 0 9px 25px rgba(52,62,48,.13); font-size: 11px; font-weight: 800; line-height: 1.35; }
+    .hero-sticker b { display: block; color: var(--accent); font-size: 18px; }
+
+    .trust-strip { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: #fbfaf7; }
+    .trust-list { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin: 0; padding: 0; list-style: none; }
+    .trust-list li { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 83px; padding: 14px; border-right: 1px solid var(--line); color: #54605a; font-size: 12px; font-weight: 700; text-align: center; }
+    .trust-list li:first-child { border-left: 1px solid var(--line); }
+    .trust-icon { color: var(--accent); font-size: 18px; }
+
+    section { padding: 105px 0; }
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 25px; margin-bottom: 42px; }
+    .section-heading h2 { max-width: 610px; margin-bottom: 0; }
+    .section-heading .lead { max-width: 370px; margin-bottom: 0; }
+
+    .configurator-section { overflow: hidden; background: #ebece5; }
+    .configurator-intro { margin-bottom: 37px; }
+    .configurator-intro h2 { max-width: 620px; margin: 11px 0 12px; }
+    .configurator-intro .lead { max-width: 630px; margin: 0; }
+    .configurator-shell { display: grid; grid-template-columns: minmax(0, 1fr) 360px; overflow: hidden; border: 1px solid rgba(123, 134, 123, .25); border-radius: var(--radius); background: #fff; box-shadow: 0 18px 45px rgba(31, 42, 37, .08); }
+
+    .scene-area { position: relative; min-height: 635px; overflow: hidden; background: #d9ded8; }
+    .scene-label { position: absolute; top: 22px; left: 25px; z-index: 5; display: inline-flex; gap: 8px; align-items: center; padding: 9px 12px; border-radius: 100px; background: rgba(255,255,255,.82); font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; backdrop-filter: blur(5px); }
+    .scene-label i { width: 7px; height: 7px; border-radius: 50%; background: #5ca26f; }
+    .scene { position: absolute; inset: 0; perspective: 900px; }
+    .wall { position: absolute; inset: 0 0 26% 0; background-color: var(--wall-color); transition: background .35s ease; }
+    .wall::before { content: ""; position: absolute; right: 11%; top: 10%; width: 21%; min-width: 120px; height: 39%; border: 10px solid rgba(250,249,242,.86); background: linear-gradient(150deg, #bedde0, #e7ece7 55%, #9dbb9a 56%); box-shadow: 0 10px 0 rgba(81,94,79,.14); }
+    .wall::after { content: ""; position: absolute; right: calc(11% + 10.5% - 2px); top: 10%; height: 39%; width: 4px; background: rgba(250,249,242,.82); box-shadow: 0 61px rgba(250,249,242,.82); }
+    .wall.is-wallpaper { background-color: var(--wall-color); background-image: radial-gradient(circle at 50% 50%, rgba(110,132,110,.34) 0 1px, transparent 1.5px), radial-gradient(circle at 1px 1px, rgba(110,132,110,.15) 0 1px, transparent 1.5px); background-size: 25px 25px, 12px 12px; }
+    .wall.is-tile { background-color: var(--wall-color); background-image: linear-gradient(rgba(255,255,255,.73) 2px, transparent 2px), linear-gradient(90deg, rgba(255,255,255,.73) 2px, transparent 2px); background-size: 54px 54px; }
+    .wall-shelf { position: absolute; left: 10%; top: 18%; width: 23%; height: 8px; background: #9b765d; box-shadow: 0 14px 11px rgba(61, 58, 48, .15); }
+    .wall-shelf::before, .wall-shelf::after { content: ""; position: absolute; bottom: 8px; border-radius: 50% 50% 35% 35%; }
+    .wall-shelf::before { left: 14%; width: 28px; height: 46px; background: #c4785c; }
+    .wall-shelf::after { left: 52%; width: 35px; height: 34px; background: #e1b95c; }
+    .floor { position: absolute; z-index: 2; inset: auto 0 0; height: 28%; background: repeating-linear-gradient(90deg, rgba(94,59,37,.18) 0 1px, transparent 1px 80px), linear-gradient(160deg, #d0aa82, var(--room-floor)); transform: perspective(470px) rotateX(35deg); transform-origin: bottom center; }
+    .floor::after { content: ""; position: absolute; top: 18px; width: 100%; border-top: 1px solid rgba(255,255,255,.3); }
+    .furniture-shadow { position: absolute; z-index: 3; bottom: 15%; left: 50%; width: 47%; height: 42px; border-radius: 50%; background: rgba(59, 44, 32, .22); filter: blur(10px); transform: translateX(-50%); }
+    .furniture-stage { position: absolute; z-index: 4; bottom: 14%; left: 50%; width: min(51%, 420px); height: 57%; transform: translateX(-50%); transition: width .3s ease, height .3s ease; }
+    .furniture { position: absolute; inset: auto 0 0; margin: auto; color: var(--furniture-color); filter: drop-shadow(9px 12px 7px rgba(58,46,34,.18)); animation: furnitureIn .38s ease-out; }
+    @keyframes furnitureIn { from { opacity: .2; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    .furniture .body { position: absolute; overflow: hidden; border-radius: 4px 4px 1px 1px; background: linear-gradient(90deg, color-mix(in srgb, currentColor 86%, #fff), currentColor 20%, color-mix(in srgb, currentColor 89%, #000)); box-shadow: inset 12px 0 rgba(255,255,255,.11), inset -8px 0 rgba(42,28,17,.1); }
+    .furniture .line { position: absolute; background: rgba(58, 42, 28, .34); }
+    .furniture .handle { position: absolute; z-index: 2; width: 5px; height: 38px; border-radius: 9px; background: #39463e; box-shadow: 0 1px 2px rgba(0,0,0,.25); }
+    .furniture .leg { position: absolute; bottom: -16px; width: 8px; height: 18px; background: var(--furniture-dark); }
+    .furniture--wardrobe { width: 74%; height: 100%; }
+    .furniture--wardrobe .body { inset: 0; }
+    .furniture--wardrobe .line:nth-of-type(1) { height: 100%; width: 2px; left: 33.33%; }
+    .furniture--wardrobe .line:nth-of-type(2) { height: 100%; width: 2px; left: 66.66%; }
+    .furniture--wardrobe .handle.one { left: calc(33.33% - 15px); top: 40%; }
+    .furniture--wardrobe .handle.two { left: calc(33.33% + 11px); top: 40%; }
+    .furniture--wardrobe .handle.three { left: calc(66.66% - 14px); top: 40%; }
+    .furniture--wardrobe .handle.four { left: calc(66.66% + 11px); top: 40%; }
+    .furniture--wardrobe .leg { bottom: -15px; }
+    .furniture--wardrobe .leg.a { left: 7%; } .furniture--wardrobe .leg.b { right: 7%; }
+    .furniture--dresser { width: 88%; height: 56%; }
+    .furniture--dresser .body { inset: 0; }
+    .furniture--dresser .line.one, .furniture--dresser .line.two, .furniture--dresser .line.three { left: 0; width: 100%; height: 2px; }
+    .furniture--dresser .line.one { top: 25%; } .furniture--dresser .line.two { top: 50%; } .furniture--dresser .line.three { top: 75%; }
+    .furniture--dresser .handle { width: 32px; height: 4px; left: calc(50% - 16px); border-radius: 8px; }
+    .furniture--dresser .handle.one { top: calc(12.5% - 2px); }.furniture--dresser .handle.two { top: calc(37.5% - 2px); }.furniture--dresser .handle.three { top: calc(62.5% - 2px); }.furniture--dresser .handle.four { top: calc(87.5% - 2px); }
+    .furniture--dresser .leg { bottom: -16px; }.furniture--dresser .leg.a { left: 8%; }.furniture--dresser .leg.b { right: 8%; }
+    .furniture--bedside { width: 45%; height: 51%; }
+    .furniture--bedside .body { inset: 0; }
+    .furniture--bedside .line { left: 0; width: 100%; height: 2px; top: 47%; }
+    .furniture--bedside .handle { width: 22px; height: 4px; left: calc(50% - 11px); top: 23%; }
+    .furniture--bedside .handle.two { top: 70%; }
+    .furniture--bedside .leg { bottom: -18px; height: 20px; }.furniture--bedside .leg.a { left: 10%; }.furniture--bedside .leg.b { right: 10%; }
+    .furniture--tv { width: 91%; height: 37%; }
+    .furniture--tv .body { inset: 0; }
+    .furniture--tv .line.one { top: 0; left: 33.33%; width: 2px; height: 100%; }.furniture--tv .line.two { top: 0; left: 66.66%; width: 2px; height: 100%; }
+    .furniture--tv .handle { width: 5px; height: 25px; top: calc(50% - 12px); }.furniture--tv .handle.one { left: calc(33.33% - 14px); }.furniture--tv .handle.two { left: calc(33.33% + 10px); }.furniture--tv .handle.three { left: calc(66.66% - 14px); }.furniture--tv .handle.four { left: calc(66.66% + 10px); }
+    .furniture--tv .leg { bottom: -17px; transform: skewX(-16deg); }.furniture--tv .leg.a { left: 10%; }.furniture--tv .leg.b { right: 10%; }
+    .scene-caption { position: absolute; z-index: 8; left: 24px; bottom: 20px; max-width: 245px; padding: 12px 14px; color: #38443d; border-left: 3px solid var(--accent); background: rgba(255,255,255,.86); font-size: 11px; font-weight: 600; line-height: 1.5; backdrop-filter: blur(7px); }
+
+    .controls-panel { padding: 29px 25px 24px; background: #fcfcfa; }
+    .controls-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
+    .controls-head h3 { margin: 3px 0 0; font-size: 20px; letter-spacing: -.05em; }
+    .reset-button { padding: 7px 0; border: 0; color: var(--muted); background: transparent; font-size: 11px; text-decoration: underline; text-underline-offset: 3px; }
+    .control-group { margin-top: 21px; }
+    .control-label { display: block; margin-bottom: 11px; color: #4d5851; font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .product-tabs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .product-tab { min-height: 56px; padding: 8px; color: #66716a; border: 1px solid var(--line); border-radius: 11px; background: #fff; font-size: 11px; font-weight: 800; text-align: left; }
+    .product-tab span { display: block; margin-bottom: 2px; color: #98a19b; font-size: 9px; font-weight: 700; }
+    .product-tab.active { color: var(--forest); border-color: var(--forest); background: #e7efe8; box-shadow: inset 0 0 0 1px var(--forest); }
+    .product-tab.active span { color: var(--accent); }
+    .select-wrap { position: relative; }
+    .select-wrap::after { content: "⌄"; position: absolute; top: 50%; right: 13px; color: var(--muted); transform: translateY(-57%); pointer-events: none; }
+    select { width: 100%; min-height: 47px; padding: 0 35px 0 13px; color: var(--ink); border: 1px solid var(--line); border-radius: 10px; outline: none; background: #fff; font-size: 12px; font-weight: 700; appearance: none; }
+    select:focus { border-color: var(--forest); box-shadow: 0 0 0 3px rgba(46,81,68,.1); }
+    .swatches { display: flex; flex-wrap: wrap; gap: 9px; }
+    .swatch { position: relative; width: 29px; height: 29px; border: 2px solid #fff; border-radius: 50%; outline: 1px solid rgba(31,42,37,.22); background: var(--swatch); transition: transform .2s; }
+    .swatch:hover { transform: scale(1.1); }
+    .swatch.active { outline: 2px solid var(--forest); outline-offset: 2px; }
+    .swatch.active::after { content: "✓"; position: absolute; inset: 0; display: grid; place-items: center; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.45); font-size: 14px; font-weight: 800; }
+    .wall-type-row { display: flex; gap: 7px; }
+    .type-chip { flex: 1; min-height: 35px; padding: 0 7px; color: #6f7973; border: 1px solid var(--line); border-radius: 8px; background: #fff; font-size: 10px; font-weight: 800; }
+    .type-chip.active { color: var(--forest); border-color: var(--forest); background: #e7efe8; }
+    .estimate { margin-top: 22px; padding: 17px; border-radius: 13px; color: #f9faf7; background: var(--forest); }
+    .estimate-note { display: block; margin-bottom: 4px; color: #bfcec4; font-size: 10px; font-weight: 700; }
+    .estimate-value { display: block; font-size: 26px; font-weight: 800; letter-spacing: -.06em; }
+    .estimate-details { display: block; margin-top: 4px; color: #d5e0d8; font-size: 10px; line-height: 1.45; }
+    .estimate .button-primary { width: 100%; min-height: 43px; margin-top: 14px; background: #fff; color: var(--forest); font-size: 11px; }
+    .estimate .button-primary:hover { background: #f0f3ee; }
+    .price-disclaimer { margin: 10px 2px 0; color: #89918c; font-size: 9px; line-height: 1.45; }
+
+    .steps { background: #f8f7f3; }
+    .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .step { min-height: 230px; padding: 27px; border: 1px solid var(--line); border-radius: 16px; background: #fff; }
+    .step-number { display: grid; place-items: center; width: 31px; height: 31px; margin-bottom: 42px; color: var(--accent); border-radius: 50%; background: #fae9e2; font-size: 12px; font-weight: 800; }
+    .step h3 { margin-bottom: 10px; font-size: 17px; letter-spacing: -.04em; }
+    .step p { margin-bottom: 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
+
+    .about-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(40px, 7vw, 100px); align-items: center; }
+    .about-visual { position: relative; min-height: 422px; overflow: hidden; border-radius: 160px 160px 14px 14px; background: #e2d8c8; }
+    .about-visual::before { content: ""; position: absolute; left: 20%; bottom: 0; width: 58%; height: 68%; background: #7a9b80; border-radius: 50% 50% 0 0; opacity: .58; }
+    .about-visual::after { content: ""; position: absolute; width: 43%; height: 43%; right: 0; bottom: 0; border-radius: 50% 0 0 0; background: #c47759; }
+    .about-card { position: absolute; z-index: 2; bottom: 38px; left: 36px; max-width: 203px; padding: 22px; border-radius: 14px; background: rgba(255,255,255,.9); box-shadow: 0 12px 25px rgba(48,47,39,.11); }
+    .about-card strong { display: block; margin-bottom: 3px; color: var(--accent); font-family: "Playfair Display", Georgia, serif; font-size: 35px; line-height: 1; }
+    .about-card span { color: var(--muted); font-size: 11px; font-weight: 700; line-height: 1.5; }
+    .about-copy h2 { margin: 11px 0 19px; }
+    .checks { display: grid; gap: 13px; padding: 0; margin: 27px 0 0; list-style: none; }
+    .checks li { position: relative; padding-left: 31px; font-size: 13px; font-weight: 700; line-height: 1.45; }
+    .checks li::before { content: "✓"; position: absolute; left: 0; top: -2px; display: grid; place-items: center; width: 20px; height: 20px; color: var(--forest); border-radius: 50%; background: var(--sage); font-size: 12px; }
+
+    .faq-section { padding-top: 0; }
+    .faq-grid { display: grid; grid-template-columns: .7fr 1.3fr; gap: clamp(35px, 9vw, 115px); }
+    .faq-grid h2 { margin: 10px 0 0; }
+    .faq-list { border-top: 1px solid var(--line); }
+    .faq-item { border-bottom: 1px solid var(--line); }
+    .faq-item button { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 20px; padding: 20px 0; color: var(--ink); border: 0; background: transparent; font-size: 14px; font-weight: 800; text-align: left; }
+    .faq-item button span:last-child { color: var(--accent); font-size: 21px; font-weight: 400; transition: transform .2s; }
+    .faq-answer { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .28s ease; }
+    .faq-answer p { overflow: hidden; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.7; }
+    .faq-item.open .faq-answer { grid-template-rows: 1fr; }
+    .faq-item.open .faq-answer p { padding-bottom: 19px; }
+    .faq-item.open button span:last-child { transform: rotate(45deg); }
+
+    .contact-section { padding: 0 0 105px; }
+    .contact-card { display: grid; grid-template-columns: 1.1fr .9fr; align-items: center; gap: 30px; padding: clamp(32px, 5vw, 58px); overflow: hidden; color: #fff; border-radius: 20px; background: var(--forest); }
+    .contact-card h2 { margin: 12px 0 15px; color: #fff; }
+    .contact-card .eyebrow { color: #edaf92; }
+    .contact-card p { max-width: 550px; margin: 0; color: #cbd9d0; font-size: 14px; line-height: 1.65; }
+    .contact-actions { display: flex; flex-wrap: wrap; gap: 11px; justify-content: flex-end; }
+    .contact-actions a { min-height: 48px; padding: 0 17px; }
+    .contact-actions .button-primary { background: var(--accent); }
+    .contact-actions .button-primary:hover { background: #d36b4d; }
+    .contact-actions .button-ghost { color: #fff; border-color: rgba(255,255,255,.35); }
+    .contact-actions .button-ghost:hover { background: rgba(255,255,255,.12); }
+
+    footer { padding: 28px 0; border-top: 1px solid var(--line); background: #fbfaf7; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; color: var(--muted); font-size: 11px; }
+    .footer-inner .brand { color: var(--ink); }
+    .footer-links { display: flex; gap: 18px; font-weight: 700; }
+
+    @media (max-width: 900px) {
+      .desktop-nav { display: none; }
+      .hero-grid, .about-grid, .faq-grid { grid-template-columns: 1fr; }
+      .hero-copy { max-width: 680px; }
+      .hero-card { max-width: 650px; min-height: 385px; }
+      .configurator-shell { grid-template-columns: 1fr; }
+      .scene-area { min-height: 530px; }
+      .controls-panel { padding: 28px; }
+      .product-tabs { grid-template-columns: repeat(4, 1fr); }
+      .section-heading { display: block; }
+      .section-heading h2 { margin-bottom: 16px; }
+      .about-visual { max-width: 620px; }
+      .faq-grid { gap: 28px; }
+      .contact-card { grid-template-columns: 1fr; }
+      .contact-actions { justify-content: flex-start; }
+    }
+    @media (max-width: 600px) {
+      .container { width: min(100% - 28px, 1180px); }
+      .header-inner { min-height: 65px; }
+      .header-cta { min-height: 38px; padding: 0 12px; font-size: 10px; }
+      .hero { padding: 49px 0 58px; }
+      .hero-card { min-height: 300px; border-radius: 130px 130px 14px 14px; }
+      .hero-cabinet { height: 160px; }
+      .hero-window { border-width: 7px; }
+      .hero-plant { transform: scale(.7) rotate(9deg); transform-origin: bottom; }
+      .hero-pot { transform: scale(.7); transform-origin: bottom; }
+      .hero-sticker { bottom: 18px; transform: scale(.8); transform-origin: left bottom; }
+      .trust-list { grid-template-columns: repeat(2, 1fr); }
+      .trust-list li { min-height: 68px; padding: 8px; font-size: 10px; }
+      .trust-list li:nth-child(3) { border-left: 1px solid var(--line); }
+      section { padding: 72px 0; }
+      .scene-area { min-height: 400px; }
+      .furniture-stage { width: 60%; height: 53%; }
+      .wall::before { right: 6%; }
+      .wall::after { right: calc(6% + 10.5% - 2px); }
+      .wall-shelf { display: none; }
+      .scene-caption { left: 14px; bottom: 13px; max-width: 180px; padding: 9px 10px; font-size: 9px; }
+      .controls-panel { padding: 22px 17px; }
+      .product-tabs { grid-template-columns: repeat(2, 1fr); }
+      .steps-grid { grid-template-columns: 1fr; }
+      .step { min-height: unset; padding: 22px; }
+      .step-number { margin-bottom: 25px; }
+      .about-visual { min-height: 340px; }
+      .contact-section { padding-bottom: 72px; }
+      .footer-inner { align-items: flex-start; flex-direction: column; }
+    }
+
+    /* Reference adaptation: warm canvas, flat surfaces, coral pulse, mobile first. */
+    :root {
+      --ink: #000000;
+      --muted: #5f5c55;
+      --paper: #ebeadf;
+      --paper-deep: #d5cec0;
+      --line: #000000;
+      --accent: #f04923;
+      --accent-dark: #c93719;
+      --forest: #000000;
+      --sage: #d5cec0;
+      --white: #ffffff;
+      --shadow: none;
+      --radius: 12px;
+    }
+    body { background: var(--paper); color: var(--ink); font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif; letter-spacing: -.05em; }
+    h1, h2 { font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif; font-weight: 700; letter-spacing: -.06em; }
+    h1 { font-size: clamp(40px, 12vw, 74px); line-height: 1.02; }
+    h2 { font-size: clamp(28px, 8vw, 53px); line-height: 1.08; }
+    .container { width: min(1200px, calc(100% - 32px)); }
+    .site-header { position: sticky; top: 10px; margin: 10px 16px 0; border: 0; border-radius: 12px; background: #fff; box-shadow: none; }
+    .header-inner { min-height: 58px; padding: 0 14px; }
+    .brand { color: #000; font-weight: 700; }
+    .brand-mark { border-color: #000; width: 28px; height: 28px; border-radius: 7px 7px 2px 2px; }
+    .brand-mark::before { border-color: #000; }
+    .brand-mark::after { background: #000; }
+    .desktop-nav { display: none; }
+    .header-cta { min-height: 38px; padding: 0 14px; background: #000; color: #fff; font-size: 11px; }
+    .hero { padding: 54px 0 28px; }
+    .hero::before { top: 110px; right: -250px; width: 520px; height: 520px; background: #d5cec0; }
+    .hero-grid { display: flex; flex-direction: column; align-items: stretch; gap: 28px; }
+    .hero-copy .lead { margin-bottom: 24px; color: #383630; font-size: 16px; line-height: 1.5; }
+    .hero-actions { flex-direction: column; align-items: stretch; gap: 10px; }
+    .button-primary, .button-ghost { min-height: 48px; padding: 0 22px; border: 1px solid #000; font-size: 14px; }
+    .button-primary { background: #000; color: #fff; }
+    .button-primary:hover { background: var(--accent); }
+    .button-ghost { background: transparent; color: #000; }
+    .hero-note { margin-top: 26px; font-size: 12px; }
+    .hero-card { min-height: 360px; border-radius: 12px; background: var(--paper-deep); box-shadow: none; }
+    .hero-sticker { background: var(--accent); color: #fff; border-radius: 999px; box-shadow: none; }
+    .hero-sticker b { color: #fff; }
+    .trust-strip { border: 0; background: transparent; }
+    .trust-list { gap: 8px; grid-template-columns: repeat(2, 1fr); }
+    .trust-list li, .trust-list li:first-child { min-height: 64px; border: 0; border-radius: 12px; background: #fff; color: #000; font-size: 12px; }
+    .trust-icon { color: var(--accent); }
+    section { padding: 72px 0; }
+    .configurator-section { background: var(--paper); }
+    .configurator-intro { margin-bottom: 24px; }
+    .configurator-intro h2 { margin: 10px 0 13px; }
+    .configurator-intro .lead { font-size: 15px; line-height: 1.5; }
+    .configurator-shell { display: flex; flex-direction: column; border: 0; border-radius: 12px; box-shadow: none; background: transparent; }
+    .scene-area { min-height: 430px; border-radius: 12px; background: var(--paper-deep); }
+    .scene-label { top: 14px; left: 14px; border-radius: 999px; background: #fff; font-size: 10px; }
+    .scene-caption { left: 14px; bottom: 14px; border: 0; border-radius: 12px; background: #fff; color: #000; }
+    .controls-panel { margin-top: 8px; padding: 20px 16px; border-radius: 12px; background: #fff; }
+    .controls-head { padding-bottom: 18px; }
+    .controls-head h3 { font-size: 22px; }
+    .product-tabs { gap: 8px; }
+    .product-tab { min-height: 58px; border: 1px solid #000; border-radius: 12px; background: #fff; color: #000; }
+    .product-tab.active { border-color: var(--accent); background: var(--accent); color: #fff; box-shadow: none; }
+    .product-tab.active span { color: #fff; }
+    select { border: 1px solid #000; border-radius: 12px; background: #fff; }
+    .swatch { width: 32px; height: 32px; outline-color: #000; }
+    .type-chip { min-height: 38px; border: 1px solid #000; border-radius: 999px; color: #000; background: #fff; }
+    .type-chip.active { border-color: var(--accent); background: var(--accent); color: #fff; }
+    .estimate { margin-top: 22px; border-radius: 12px; background: var(--accent); color: #fff; }
+    .estimate-note, .estimate-details { color: #fff; }
+    .estimate .button-primary { border-color: #000; background: #fff; color: #000; }
+    .steps { background: transparent; }
+    .steps-grid { grid-template-columns: 1fr; gap: 8px; }
+    .step { min-height: 0; padding: 22px; border: 0; border-radius: 12px; background: #fff; }
+    .step-number { margin-bottom: 24px; color: #fff; background: var(--accent); }
+    .step h3 { font-size: 18px; }
+    .step p { color: #5f5c55; }
+    .about-grid { gap: 30px; }
+    .about-visual { min-height: 340px; border-radius: 12px; background: var(--paper-deep); }
+    .about-card { bottom: 18px; left: 18px; border-radius: 12px; box-shadow: none; }
+    .about-card strong { color: var(--accent); }
+    .faq-grid { gap: 28px; }
+    .faq-item button { font-size: 15px; letter-spacing: -.04em; }
+    .contact-section { padding-bottom: 72px; }
+    .contact-card { display: block; padding: 24px; border-radius: 12px; background: var(--accent); }
+    .contact-card h2 { color: #fff; font-size: 34px; }
+    .contact-card p { color: #fff; }
+    .contact-actions { display: grid; gap: 10px; margin-top: 24px; }
+    .contact-actions .button-primary { background: #fff; color: #000; }
+    .contact-actions .button-ghost { color: #fff; border-color: #fff; }
+    footer { border: 0; background: #fff; }
+    .footer-links { display: none; }
+    @media (min-width: 760px) {
+      .site-header { top: 16px; margin: 16px 16px 0; }
+      .desktop-nav { display: flex; }
+      .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 42px; }
+      .hero-actions { flex-direction: row; align-items: center; }
+      .configurator-shell { display: grid; grid-template-columns: minmax(0, 1fr) 360px; background: #fff; }
+      .controls-panel { margin-top: 0; }
+      .steps-grid { grid-template-columns: repeat(3, 1fr); }
+      .about-grid { grid-template-columns: .9fr 1.1fr; }
+      .contact-card { display: grid; }
+      .contact-actions { display: flex; margin-top: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <!-- TODO: заменить «Форма дома» на название мастерской / добавить свой логотип. -->
+      <a class="brand" href="#top" aria-label="Форма дома — на главную"><span class="brand-mark" aria-hidden="true"></span>Форма дома</a>
+      <nav class="desktop-nav" aria-label="Основная навигация">
+        <a href="#configurator">Конфигуратор</a>
+        <a href="#process">Как работаем</a>
+        <a href="#about">О мастерской</a>
+        <a href="#faq">Вопросы</a>
+      </nav>
+      <!-- TODO: вставить реальную ссылку на мессенджер или номер телефона. -->
+      <a class="header-cta" href="#contacts">Рассчитать проект</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">Корпусная мебель на заказ</span>
+          <h1>Пространство, в котором <em>хочется жить</em></h1>
+          <p class="lead">Шкафы, комоды и тумбы из ЛДСП по вашим размерам. Подберём цвет, наполнение и сделаем понятный расчёт до начала работ.</p>
+          <div class="hero-actions">
+            <a class="button-primary" href="#configurator">Собрать свой вариант <span class="arrow">→</span></a>
+            <a class="button-ghost" href="#process">Как это устроено</a>
+          </div>
+          <div class="hero-note">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 22s8-3.5 8-10V5l-8-3-8 3v7c0 6.5 8 10 8 10Z" stroke="currentColor" stroke-width="1.8"/><path d="m8.5 12 2.2 2.2 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Без регистрации и навязчивых звонков</span>
+          </div>
+        </div>
+        <div class="hero-card" aria-hidden="true">
+          <div class="sun"></div><div class="hero-window"></div><div class="hero-floor"></div>
+          <div class="hero-cabinet"></div><div class="hero-plant"></div><div class="hero-pot"></div>
+          <div class="hero-sticker"><b>от 47 900 ₽</b>ориентир для шкафа<br>из ЛДСП</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="trust-strip" aria-label="Преимущества">
+      <div class="container"><ul class="trust-list">
+        <li><span class="trust-icon">✦</span>Индивидуальный проект</li>
+        <li><span class="trust-icon">⌁</span>Понятная смета до заказа</li>
+        <li><span class="trust-icon">□</span>Качественное ЛДСП</li>
+        <li><span class="trust-icon">↗</span>Замер и монтаж</li>
+      </ul></div>
+    </div>
+
+    <section class="configurator-section" id="configurator">
+      <div class="container">
+        <div class="configurator-intro">
+          <span class="eyebrow">Интерактивный пример</span>
+          <h2>Примерьте мебель<br>к своему интерьеру</h2>
+          <p class="lead">Выберите предмет, размер, материал и оттенки. Калькулятор покажет ориентир — точную стоимость мастер подтвердит после замера и согласования проекта.</p>
+        </div>
+        <div class="configurator-shell">
+          <div class="scene-area">
+            <div class="scene-label"><i></i><span>Предпросмотр интерьера</span></div>
+            <div class="scene">
+              <div class="wall" id="roomWall"><div class="wall-shelf"></div></div>
+              <div class="floor"></div>
+              <div class="furniture-shadow"></div>
+              <div class="furniture-stage" id="furnitureStage" aria-label="Визуализация выбранной мебели"></div>
+            </div>
+            <p class="scene-caption" id="sceneCaption">Шкаф из ЛДСП в оттенке «Дуб натуральный»</p>
+          </div>
+          <aside class="controls-panel" aria-label="Настройки конфигуратора">
+            <div class="controls-head"><div><span class="eyebrow">Ваш вариант</span><h3>Настройте комнату</h3></div><button class="reset-button" id="resetButton" type="button">Сбросить</button></div>
+            <div class="control-group">
+              <span class="control-label">Что подбираем</span>
+              <div class="product-tabs" id="productTabs">
+                <button class="product-tab active" type="button" data-product="wardrobe"><span>01</span>Шкаф</button>
+                <button class="product-tab" type="button" data-product="dresser"><span>02</span>Комод</button>
+                <button class="product-tab" type="button" data-product="bedside"><span>03</span>Тумба</button>
+                <button class="product-tab" type="button" data-product="tv"><span>04</span>ТВ-тумба</button>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="sizeSelect">Стандартный размер</label>
+              <div class="select-wrap"><select id="sizeSelect" aria-label="Стандартный размер"></select></div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="materialSelect">Материал фасадов</label>
+              <div class="select-wrap"><select id="materialSelect" aria-label="Материал фасадов">
+                <option value="ldsp">ЛДСП — базовый вариант</option>
+                <option value="egger">ЛДСП Egger</option>
+                <option value="mdf">МДФ в плёнке</option>
+              </select></div>
+            </div>
+            <div class="control-group">
+              <span class="control-label">Цвет мебели</span>
+              <div class="swatches" id="furnitureSwatches" aria-label="Цвет мебели"></div>
+            </div>
+            <div class="control-group">
+              <span class="control-label">Отделка стены</span>
+              <div class="wall-type-row" id="wallTypes">
+                <button class="type-chip active" type="button" data-wall-type="paint">Краска</button>
+                <button class="type-chip" type="button" data-wall-type="wallpaper">Обои</button>
+                <button class="type-chip" type="button" data-wall-type="tile">Плитка</button>
+              </div>
+              <div class="swatches" id="wallSwatches" aria-label="Цвет стены" style="margin-top: 12px;"></div>
+            </div>
+            <div class="estimate" aria-live="polite">
+              <span class="estimate-note">Ориентировочная цена</span>
+              <strong class="estimate-value" id="priceValue">от 47 900 ₽</strong>
+              <span class="estimate-details" id="priceDetails">Шкаф · 1000 × 600 × 2400 мм · ЛДСП</span>
+              <a href="#contacts" class="button-primary">Запросить точный расчёт</a>
+            </div>
+            <p class="price-disclaimer">Цена носит информационный характер. Не включает нестандартную фурнитуру, доставку и монтаж — их можно добавить позже.</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="steps" id="process">
+      <div class="container">
+        <div class="section-heading"><h2>От идеи до готовой мебели — спокойно и прозрачно</h2><p class="lead">На этом месте можно позже описать ваш реальный процесс, сроки и условия работы.</p></div>
+        <div class="steps-grid">
+          <article class="step"><div class="step-number">01</div><h3>Обсуждаем задачу</h3><p>Вы присылаете размеры, фото и пожелания. Мы уточняем детали и помогаем с планировкой.</p></article>
+          <article class="step"><div class="step-number">02</div><h3>Согласовываем проект</h3><p>Показываем материалы, наполнение и смету. Все ключевые решения фиксируем до запуска в работу.</p></article>
+          <article class="step"><div class="step-number">03</div><h3>Изготавливаем и монтируем</h3><p>Привозим готовую мебель, аккуратно устанавливаем и оставляем пространство чистым.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="container about-grid">
+        <div class="about-visual" aria-hidden="true"><div class="about-card"><strong>7+ лет</strong><span>создаём мебель, которая становится частью дома</span></div></div>
+        <div class="about-copy">
+          <span class="eyebrow">О мастерской</span>
+          <h2>Мебель не должна усложнять жизнь</h2>
+          <p class="lead">Этот блок — место для вашей истории. Здесь можно рассказать, почему вы занимаетесь мебелью, показать подход к качеству и добавить фото команды или производства.</p>
+          <ul class="checks">
+            <li>Продумываем хранение, а не только внешний вид</li>
+            <li>Помогаем выбрать практичные сочетания цветов</li>
+            <li>Объясняем стоимость простым и честным языком</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq-section" id="faq">
+      <div class="container faq-grid">
+        <div><span class="eyebrow">Вопросы и ответы</span><h2>Всё важное — до заказа</h2></div>
+        <div class="faq-list">
+          <article class="faq-item open"><button type="button" aria-expanded="true"><span>Цена в конфигураторе окончательная?</span><span>+</span></button><div class="faq-answer"><p>Нет, это ориентир для стандартной комплектации. На итог влияют точные габариты, наполнение, фурнитура, сложность монтажа и выбранный материал.</p></div></article>
+          <article class="faq-item"><button type="button" aria-expanded="false"><span>Можно заказать мебель по своим размерам?</span><span>+</span></button><div class="faq-answer"><p>Да. Конфигуратор помогает выбрать направление, а индивидуальные размеры и внутреннее наполнение обсуждаются перед подготовкой проекта.</p></div></article>
+          <article class="faq-item"><button type="button" aria-expanded="false"><span>Какие материалы можно выбрать?</span><span>+</span></button><div class="faq-answer"><p>В каркасе предусмотрены базовые варианты ЛДСП и МДФ. После получения вашего ассортимента сюда легко добавить конкретные декоры, бренды и доплаты.</p></div></article>
+          <article class="faq-item"><button type="button" aria-expanded="false"><span>Как оформить заказ?</span><span>+</span></button><div class="faq-answer"><p>Достаточно написать в удобный мессенджер или позвонить. Здесь позднее будут размещены реальные контакты, график и ссылка на консультацию.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-section" id="contacts">
+      <div class="container"><div class="contact-card">
+        <div><span class="eyebrow">Готовы обсудить проект?</span><h2>Давайте создадим мебель для вашего дома</h2><p>Вставьте здесь реальные номер телефона, Telegram, WhatsApp или форму связи. Регистрация пользователю не потребуется.</p></div>
+        <!-- TODO: замените ссылки-заглушки на реальные способы связи. -->
+        <div class="contact-actions"><a class="button-primary" href="tel:+70000000000">Позвонить мастеру</a><a class="button-ghost" href="https://t.me/username" target="_blank" rel="noopener">Написать в Telegram</a></div>
+      </div></div>
+    </section>
+  </main>
+
+  <footer><div class="container footer-inner"><a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"></span>Форма дома</a><span>© <span id="currentYear"></span> · Корпусная мебель на заказ</span><div class="footer-links"><a href="#configurator">Конфигуратор</a><a href="#contacts">Контакты</a></div></div></footer>
+
+  <script>
+    /* Все данные каталога находятся здесь — сайт работает без БД и внешних интеграций. */
+    const catalog = {
+      wardrobe: {
+        name: "Шкаф", shortMaterial: "ЛДСП", base: 47900, className: "furniture--wardrobe",
+        sizes: [
+          { id: "wardrobe-100", label: "1000 × 600 × 2400 мм", extra: 0 },
+          { id: "wardrobe-150", label: "1500 × 600 × 2400 мм", extra: 11900 },
+          { id: "wardrobe-200", label: "2000 × 600 × 2400 мм", extra: 23900 }
+        ]
+      },
+      dresser: {
+        name: "Комод", shortMaterial: "ЛДСП", base: 28900, className: "furniture--dresser",
+        sizes: [
+          { id: "dresser-90", label: "900 × 450 × 850 мм", extra: 0 },
+          { id: "dresser-120", label: "1200 × 450 × 850 мм", extra: 6500 },
+          { id: "dresser-150", label: "1500 × 450 × 850 мм", extra: 12500 }
+        ]
+      },
+      bedside: {
+        name: "Тумба", shortMaterial: "ЛДСП", base: 11900, className: "furniture--bedside",
+        sizes: [
+          { id: "bedside-45", label: "450 × 400 × 500 мм", extra: 0 },
+          { id: "bedside-60", label: "600 × 400 × 500 мм", extra: 2300 },
+          { id: "bedside-80", label: "800 × 400 × 500 мм", extra: 5200 }
+        ]
+      },
+      tv: {
+        name: "ТВ-тумба", shortMaterial: "ЛДСП", base: 20900, className: "furniture--tv",
+        sizes: [
+          { id: "tv-120", label: "1200 × 400 × 500 мм", extra: 0 },
+          { id: "tv-160", label: "1600 × 400 × 500 мм", extra: 5700 },
+          { id: "tv-200", label: "2000 × 400 × 500 мм", extra: 10900 }
+        ]
+      }
+    };
+
+    const furnitureColors = [
+      { id: "natural", label: "Дуб натуральный", hex: "#b48a64", extra: 0, dark: "#805a3e" },
+      { id: "white", label: "Белый матовый", hex: "#e5e1d9", extra: 800, dark: "#a9a49a" },
+      { id: "graphite", label: "Графит", hex: "#515956", extra: 1200, dark: "#303734" },
+      { id: "walnut", label: "Орех", hex: "#6d4937", extra: 2800, dark: "#432a20" },
+      { id: "sage", label: "Шалфей", hex: "#829889", extra: 1600, dark: "#52695a" }
+    ];
+    const wallColors = [
+      { id: "sand", label: "Песочный", hex: "#e6ded3" },
+      { id: "mist", label: "Серо-зелёный", hex: "#cbd7d1" },
+      { id: "blush", label: "Пыльная роза", hex: "#d9c5bf" },
+      { id: "cream", label: "Сливочный", hex: "#eee8d8" },
+      { id: "blue", label: "Голубой", hex: "#c2d3d9" }
+    ];
+    const materials = {
+      ldsp: { name: "ЛДСП", extra: 0 },
+      egger: { name: "ЛДСП Egger", extra: 5800 },
+      mdf: { name: "МДФ в плёнке", extra: 12400 }
+    };
+    const defaultState = { product: "wardrobe", sizeIndex: 0, material: "ldsp", furnitureColor: "natural", wallColor: "sand", wallType: "paint" };
+    let state = { ...defaultState };
+
+    const furnitureStage = document.getElementById("furnitureStage");
+    const roomWall = document.getElementById("roomWall");
+    const sizeSelect = document.getElementById("sizeSelect");
+    const materialSelect = document.getElementById("materialSelect");
+    const priceValue = document.getElementById("priceValue");
+    const priceDetails = document.getElementById("priceDetails");
+    const sceneCaption = document.getElementById("sceneCaption");
+
+    function rubles(amount) { return new Intl.NumberFormat("ru-RU").format(amount) + " ₽"; }
+    function createFurnitureMarkup(type) {
+      const doors = type === "wardrobe" || type === "tv";
+      if (type === "wardrobe") return '<div class="furniture furniture--wardrobe"><div class="body"></div><i class="line"></i><i class="line"></i><i class="handle one"></i><i class="handle two"></i><i class="handle three"></i><i class="handle four"></i><i class="leg a"></i><i class="leg b"></i></div>';
+      if (type === "dresser") return '<div class="furniture furniture--dresser"><div class="body"></div><i class="line one"></i><i class="line two"></i><i class="line three"></i><i class="handle one"></i><i class="handle two"></i><i class="handle three"></i><i class="handle four"></i><i class="leg a"></i><i class="leg b"></i></div>';
+      if (type === "bedside") return '<div class="furniture furniture--bedside"><div class="body"></div><i class="line"></i><i class="handle one"></i><i class="handle two"></i><i class="leg a"></i><i class="leg b"></i></div>';
+      return '<div class="furniture furniture--tv"><div class="body"></div><i class="line one"></i><i class="line two"></i><i class="handle one"></i><i class="handle two"></i><i class="handle three"></i><i class="handle four"></i><i class="leg a"></i><i class="leg b"></i></div>';
+    }
+    function renderSizes() {
+      const sizes = catalog[state.product].sizes;
+      if (state.sizeIndex >= sizes.length) state.sizeIndex = 0;
+      sizeSelect.innerHTML = sizes.map((size, index) => '<option value="' + index + '">' + size.label + '</option>').join("");
+      sizeSelect.value = state.sizeIndex;
+    }
+    function renderSwatches() {
+      const furnitureSwatches = document.getElementById("furnitureSwatches");
+      furnitureSwatches.innerHTML = furnitureColors.map(color => '<button type="button" class="swatch ' + (state.furnitureColor === color.id ? "active" : "") + '" data-color="' + color.id + '" style="--swatch:' + color.hex + '" aria-label="Цвет мебели: ' + color.label + '" title="' + color.label + '"></button>').join("");
+      const wallSwatches = document.getElementById("wallSwatches");
+      wallSwatches.innerHTML = wallColors.map(color => '<button type="button" class="swatch ' + (state.wallColor === color.id ? "active" : "") + '" data-color="' + color.id + '" style="--swatch:' + color.hex + '" aria-label="Цвет стены: ' + color.label + '" title="' + color.label + '"></button>').join("");
+    }
+    function render() {
+      const product = catalog[state.product];
+      const size = product.sizes[state.sizeIndex];
+      const furnitureColor = furnitureColors.find(c => c.id === state.furnitureColor);
+      const wallColor = wallColors.find(c => c.id === state.wallColor);
+      const material = materials[state.material];
+      const total = product.base + size.extra + furnitureColor.extra + material.extra;
+
+      furnitureStage.innerHTML = createFurnitureMarkup(state.product);
+      document.documentElement.style.setProperty("--furniture-color", furnitureColor.hex);
+      document.documentElement.style.setProperty("--furniture-dark", furnitureColor.dark);
+      document.documentElement.style.setProperty("--wall-color", wallColor.hex);
+      roomWall.className = "wall" + (state.wallType === "paint" ? "" : " is-" + state.wallType);
+      priceValue.textContent = "от " + rubles(total);
+      priceDetails.textContent = product.name + " · " + size.label + " · " + material.name;
+      sceneCaption.textContent = product.name + " из " + material.name + " в оттенке «" + furnitureColor.label + "»";
+      document.querySelectorAll(".product-tab").forEach(btn => btn.classList.toggle("active", btn.dataset.product === state.product));
+      document.querySelectorAll(".type-chip").forEach(btn => btn.classList.toggle("active", btn.dataset.wallType === state.wallType));
+      materialSelect.value = state.material;
+      renderSwatches();
+    }
+    function resetConfigurator() { state = { ...defaultState }; renderSizes(); render(); }
+
+    document.getElementById("productTabs").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-product]");
+      if (!button) return;
+      state.product = button.dataset.product; state.sizeIndex = 0; renderSizes(); render();
+    });
+    sizeSelect.addEventListener("change", () => { state.sizeIndex = Number(sizeSelect.value); render(); });
+    materialSelect.addEventListener("change", () => { state.material = materialSelect.value; render(); });
+    document.getElementById("furnitureSwatches").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-color]"); if (!button) return; state.furnitureColor = button.dataset.color; render();
+    });
+    document.getElementById("wallSwatches").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-color]"); if (!button) return; state.wallColor = button.dataset.color; render();
+    });
+    document.getElementById("wallTypes").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-wall-type]"); if (!button) return; state.wallType = button.dataset.wallType; render();
+    });
+    document.getElementById("resetButton").addEventListener("click", resetConfigurator);
+    document.querySelectorAll(".faq-item button").forEach(button => button.addEventListener("click", () => {
+      const item = button.closest(".faq-item"); const wasOpen = item.classList.contains("open");
+      document.querySelectorAll(".faq-item").forEach(faq => { faq.classList.remove("open"); faq.querySelector("button").setAttribute("aria-expanded", "false"); });
+      if (!wasOpen) { item.classList.add("open"); button.setAttribute("aria-expanded", "true"); }
+    }));
+    document.getElementById("currentYear").textContent = new Date().getFullYear();
+    renderSizes(); render();
+
+  </script>
+</body>
+</html>
