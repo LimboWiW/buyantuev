@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Каркас сайта корпусной мебели с интерактивным конфигуратором и ориентировочными ценами." />
-  <title>Форма дома — корпусная мебель на заказ</title>
+  <meta name="description" content="buyantuev мебель — шкафы и кухни на заказ в Улан-Удэ. В деле с 2005 года." />
+  <title>buyantuev мебель — шкафы и кухни на заказ</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -60,6 +60,7 @@
     }
     .header-inner { min-height: 78px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
     .brand { display: inline-flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 800; letter-spacing: -.04em; }
+    .brand small { margin-left: -5px; font-size: 10px; font-weight: 500; letter-spacing: -.03em; }
     .brand-mark { position: relative; display: grid; place-items: center; width: 31px; height: 31px; border: 2px solid var(--forest); border-radius: 8px 8px 2px 2px; }
     .brand-mark::before { content: ""; width: 10px; height: 15px; border: 2px solid var(--forest); border-bottom: 0; border-radius: 7px 7px 0 0; }
     .brand-mark::after { content: ""; position: absolute; bottom: -5px; width: 36px; height: 2px; background: var(--forest); border-radius: 2px; }
@@ -135,7 +136,7 @@
     .floor { position: absolute; z-index: 2; inset: auto 0 0; height: 28%; background: repeating-linear-gradient(90deg, rgba(94,59,37,.18) 0 1px, transparent 1px 80px), linear-gradient(160deg, #d0aa82, var(--room-floor)); transform: perspective(470px) rotateX(35deg); transform-origin: bottom center; }
     .floor::after { content: ""; position: absolute; top: 18px; width: 100%; border-top: 1px solid rgba(255,255,255,.3); }
     .furniture-shadow { position: absolute; z-index: 3; bottom: 15%; left: 50%; width: 47%; height: 42px; border-radius: 50%; background: rgba(59, 44, 32, .22); filter: blur(10px); transform: translateX(-50%); }
-    .furniture-stage { position: absolute; z-index: 4; bottom: 14%; left: 50%; width: min(51%, 420px); height: 57%; transform: translateX(-50%); transition: width .3s ease, height .3s ease; }
+    .furniture-stage { position: absolute; z-index: 4; bottom: 14%; left: 50%; width: min(51%, 420px); height: 57%; transform: translateX(-50%); transition: width .3s ease, height .3s ease, transform .3s ease; }
     .furniture { position: absolute; inset: auto 0 0; margin: auto; color: var(--furniture-color); filter: drop-shadow(9px 12px 7px rgba(58,46,34,.18)); animation: furnitureIn .38s ease-out; }
     @keyframes furnitureIn { from { opacity: .2; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
     .furniture .body { position: absolute; overflow: hidden; border-radius: 4px 4px 1px 1px; background: linear-gradient(90deg, color-mix(in srgb, currentColor 86%, #fff), currentColor 20%, color-mix(in srgb, currentColor 89%, #000)); box-shadow: inset 12px 0 rgba(255,255,255,.11), inset -8px 0 rgba(42,28,17,.1); }
@@ -170,6 +171,18 @@
     .furniture--tv .line.one { top: 0; left: 33.33%; width: 2px; height: 100%; }.furniture--tv .line.two { top: 0; left: 66.66%; width: 2px; height: 100%; }
     .furniture--tv .handle { width: 5px; height: 25px; top: calc(50% - 12px); }.furniture--tv .handle.one { left: calc(33.33% - 14px); }.furniture--tv .handle.two { left: calc(33.33% + 10px); }.furniture--tv .handle.three { left: calc(66.66% - 14px); }.furniture--tv .handle.four { left: calc(66.66% + 10px); }
     .furniture--tv .leg { bottom: -17px; transform: skewX(-16deg); }.furniture--tv .leg.a { left: 10%; }.furniture--tv .leg.b { right: 10%; }
+    .furniture--kitchen { width: 95%; height: 67%; }
+    .furniture--kitchen .base, .furniture--kitchen .upper { position: absolute; left: 0; width: 100%; background: linear-gradient(90deg, color-mix(in srgb, currentColor 80%, #fff), currentColor 24%, color-mix(in srgb, currentColor 78%, #000)); border-radius: 3px; box-shadow: inset 0 9px rgba(255,255,255,.13), inset -10px 0 rgba(35,22,12,.12); }
+    .furniture--kitchen .base { bottom: 0; height: 48%; }
+    .furniture--kitchen .upper { top: 0; height: 35%; width: 72%; right: 0; left: auto; }
+    .furniture--kitchen .counter { position: absolute; z-index: 2; bottom: 46%; left: -2%; width: 104%; height: 9px; border-radius: 2px; background: #d0b08b; box-shadow: 0 3px 0 rgba(48,31,18,.22); }
+    .furniture--kitchen .line { z-index: 3; width: 2px; height: 100%; background: rgba(58,42,28,.34); }
+    .furniture--kitchen .line.a { left: 25%; }.furniture--kitchen .line.b { left: 50%; }.furniture--kitchen .line.c { left: 75%; }
+    .furniture--kitchen .handle { z-index: 4; width: 29px; height: 4px; left: calc(12.5% - 14px); top: 70%; border-radius: 8px; }
+    .furniture--kitchen .handle.two { left: calc(37.5% - 14px); }.furniture--kitchen .handle.three { left: calc(62.5% - 14px); }.furniture--kitchen .handle.four { left: calc(87.5% - 14px); }
+    .furniture--kitchen .sink { position: absolute; z-index: 4; right: 11%; bottom: 49%; width: 17%; height: 20px; border: 3px solid #8a765f; border-radius: 4px; background: #b9c0bc; }
+    .furniture--kitchen .stove { position: absolute; z-index: 4; left: 54%; bottom: 49%; width: 18%; height: 22px; border-radius: 3px; background: #2d3030; box-shadow: inset 0 0 0 3px #444, inset 8px 7px #171919; }
+    .furniture--kitchen .leg { bottom: -14px; width: 7px; height: 15px; background: var(--furniture-dark); }.furniture--kitchen .leg.a { left: 6%; }.furniture--kitchen .leg.b { right: 6%; }
     .scene-caption { position: absolute; z-index: 8; left: 24px; bottom: 20px; max-width: 245px; padding: 12px 14px; color: #38443d; border-left: 3px solid var(--accent); background: rgba(255,255,255,.86); font-size: 11px; font-weight: 600; line-height: 1.5; backdrop-filter: blur(7px); }
 
     .controls-panel { padding: 29px 25px 24px; background: #fcfcfa; }
@@ -178,6 +191,12 @@
     .reset-button { padding: 7px 0; border: 0; color: var(--muted); background: transparent; font-size: 11px; text-decoration: underline; text-underline-offset: 3px; }
     .control-group { margin-top: 21px; }
     .control-label { display: block; margin-bottom: 11px; color: #4d5851; font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .dimension-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+    .dimension-grid label { display: grid; grid-template-columns: 26px 1fr 26px; grid-template-rows: auto 40px; align-items: center; gap: 3px; }
+    .dimension-grid label > span { grid-column: 1 / -1; margin-bottom: 4px; color: var(--muted); font-size: 9px; font-weight: 800; text-transform: uppercase; }
+    .dimension-grid input { width: 100%; min-width: 0; height: 38px; padding: 0 2px; color: var(--ink); border: 1px solid var(--line); border-radius: 8px; background: #fff; font-size: 11px; font-weight: 800; text-align: center; }
+    .stepper { height: 38px; padding: 0; color: var(--ink); border: 1px solid var(--line); border-radius: 8px; background: var(--paper); font-size: 18px; line-height: 1; }
+    .stepper:hover { color: #fff; background: var(--accent); }
     .product-tabs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
     .product-tab { min-height: 56px; padding: 8px; color: #66716a; border: 1px solid var(--line); border-radius: 11px; background: #fff; font-size: 11px; font-weight: 800; text-align: left; }
     .product-tab span { display: block; margin-bottom: 2px; color: #98a19b; font-size: 9px; font-weight: 700; }
@@ -405,8 +424,7 @@
 <body>
   <header class="site-header">
     <div class="container header-inner">
-      <!-- TODO: заменить «Форма дома» на название мастерской / добавить свой логотип. -->
-      <a class="brand" href="#top" aria-label="Форма дома — на главную"><span class="brand-mark" aria-hidden="true"></span>Форма дома</a>
+      <a class="brand" href="#top" aria-label="buyantuev мебель — на главную"><span class="brand-mark" aria-hidden="true"></span>buyantuev <small>мебель</small></a>
       <nav class="desktop-nav" aria-label="Основная навигация">
         <a href="#configurator">Конфигуратор</a>
         <a href="#process">Как работаем</a>
@@ -422,9 +440,9 @@
     <section class="hero">
       <div class="container hero-grid">
         <div class="hero-copy">
-          <span class="eyebrow">Корпусная мебель на заказ</span>
-          <h1>Пространство, в котором <em>хочется жить</em></h1>
-          <p class="lead">Шкафы, комоды и тумбы из ЛДСП по вашим размерам. Подберём цвет, наполнение и сделаем понятный расчёт до начала работ.</p>
+          <span class="eyebrow">Мебель в деле с 2005 года</span>
+          <h1>Шкафы и кухни, которые <em>работают на дом</em></h1>
+          <p class="lead">Изготавливаем корпусные шкафы и кухонные гарнитуры по вашим размерам. Настройте конфигурацию, цвет и материал — получите ориентир по ценам для Улан‑Удэ.</p>
           <div class="hero-actions">
             <a class="button-primary" href="#configurator">Собрать свой вариант <span class="arrow">→</span></a>
             <a class="button-ghost" href="#process">Как это устроено</a>
@@ -437,7 +455,7 @@
         <div class="hero-card" aria-hidden="true">
           <div class="sun"></div><div class="hero-window"></div><div class="hero-floor"></div>
           <div class="hero-cabinet"></div><div class="hero-plant"></div><div class="hero-pot"></div>
-          <div class="hero-sticker"><b>от 47 900 ₽</b>ориентир для шкафа<br>из ЛДСП</div>
+          <div class="hero-sticker"><b>от 32 900 ₽</b>ориентир для шкафа<br>в Улан‑Удэ · 2026</div>
         </div>
       </div>
     </section>
@@ -454,9 +472,9 @@
     <section class="configurator-section" id="configurator">
       <div class="container">
         <div class="configurator-intro">
-          <span class="eyebrow">Интерактивный пример</span>
-          <h2>Примерьте мебель<br>к своему интерьеру</h2>
-          <p class="lead">Выберите предмет, размер, материал и оттенки. Калькулятор покажет ориентир — точную стоимость мастер подтвердит после замера и согласования проекта.</p>
+          <span class="eyebrow">Интерактивный расчёт</span>
+          <h2>Соберите шкаф<br>или кухню под себя</h2>
+          <p class="lead">Размеры можно менять колёсиками или кнопками прямо на карточках. Цена ориентирована на рынок Улан‑Удэ в 2026 году и включает поправку на декор.</p>
         </div>
         <div class="configurator-shell">
           <div class="scene-area">
@@ -475,14 +493,16 @@
               <span class="control-label">Что подбираем</span>
               <div class="product-tabs" id="productTabs">
                 <button class="product-tab active" type="button" data-product="wardrobe"><span>01</span>Шкаф</button>
-                <button class="product-tab" type="button" data-product="dresser"><span>02</span>Комод</button>
-                <button class="product-tab" type="button" data-product="bedside"><span>03</span>Тумба</button>
-                <button class="product-tab" type="button" data-product="tv"><span>04</span>ТВ-тумба</button>
+                <button class="product-tab" type="button" data-product="kitchen"><span>02</span>Кухня</button>
               </div>
             </div>
             <div class="control-group">
-              <label class="control-label" for="sizeSelect">Стандартный размер</label>
-              <div class="select-wrap"><select id="sizeSelect" aria-label="Стандартный размер"></select></div>
+              <span class="control-label">Размеры, мм · колесо мыши / +/-</span>
+              <div class="dimension-grid" id="dimensionControls">
+                <label><span>Ширина</span><button type="button" class="stepper" data-dim="width" data-step="-50">−</button><input id="widthInput" type="number" min="600" max="4000" step="50" value="1200"><button type="button" class="stepper" data-dim="width" data-step="50">+</button></label>
+                <label><span>Высота</span><button type="button" class="stepper" data-dim="height" data-step="-50">−</button><input id="heightInput" type="number" min="700" max="3000" step="50" value="2400"><button type="button" class="stepper" data-dim="height" data-step="50">+</button></label>
+                <label><span>Глубина</span><button type="button" class="stepper" data-dim="depth" data-step="-50">−</button><input id="depthInput" type="number" min="300" max="800" step="50" value="600"><button type="button" class="stepper" data-dim="depth" data-step="50">+</button></label>
+              </div>
             </div>
             <div class="control-group">
               <label class="control-label" for="materialSelect">Материал фасадов</label>
@@ -490,11 +510,13 @@
                 <option value="ldsp">ЛДСП — базовый вариант</option>
                 <option value="egger">ЛДСП Egger</option>
                 <option value="mdf">МДФ в плёнке</option>
+                <option value="enamel">МДФ эмаль матовая</option>
+                <option value="veneer">Шпон натуральный</option>
               </select></div>
             </div>
             <div class="control-group">
               <span class="control-label">Цвет мебели</span>
-              <div class="swatches" id="furnitureSwatches" aria-label="Цвет мебели"></div>
+              <div class="swatches color-wheel" id="furnitureSwatches" aria-label="Цвет мебели"></div>
             </div>
             <div class="control-group">
               <span class="control-label">Отделка стены</span>
@@ -503,15 +525,15 @@
                 <button class="type-chip" type="button" data-wall-type="wallpaper">Обои</button>
                 <button class="type-chip" type="button" data-wall-type="tile">Плитка</button>
               </div>
-              <div class="swatches" id="wallSwatches" aria-label="Цвет стены" style="margin-top: 12px;"></div>
+              <div class="swatches color-wheel" id="wallSwatches" aria-label="Цвет стены" style="margin-top: 12px;"></div>
             </div>
             <div class="estimate" aria-live="polite">
               <span class="estimate-note">Ориентировочная цена</span>
               <strong class="estimate-value" id="priceValue">от 47 900 ₽</strong>
-              <span class="estimate-details" id="priceDetails">Шкаф · 1000 × 600 × 2400 мм · ЛДСП</span>
+              <span class="estimate-details" id="priceDetails">Шкаф · 1200 × 600 × 2400 мм · ЛДСП</span>
               <a href="#contacts" class="button-primary">Запросить точный расчёт</a>
             </div>
-            <p class="price-disclaimer">Цена носит информационный характер. Не включает нестандартную фурнитуру, доставку и монтаж — их можно добавить позже.</p>
+            <p class="price-disclaimer">Ориентир для Улан‑Удэ на 2026 год с поправкой +10–15% на декор. Точная смета зависит от фурнитуры, наполнения, доставки и монтажа.</p>
           </aside>
         </div>
       </div>
@@ -530,15 +552,15 @@
 
     <section id="about">
       <div class="container about-grid">
-        <div class="about-visual" aria-hidden="true"><div class="about-card"><strong>7+ лет</strong><span>создаём мебель, которая становится частью дома</span></div></div>
+        <div class="about-visual" aria-hidden="true"><div class="about-card"><strong>21 год</strong><span>создаём мебель и знаем производство изнутри</span></div></div>
         <div class="about-copy">
           <span class="eyebrow">О мастерской</span>
-          <h2>Мебель не должна усложнять жизнь</h2>
-          <p class="lead">Этот блок — место для вашей истории. Здесь можно рассказать, почему вы занимаетесь мебелью, показать подход к качеству и добавить фото команды или производства.</p>
+          <h2>buyantuev мебель — в деле с 2005 года</h2>
+          <p class="lead">Проектируем и изготавливаем шкафы и кухни для домов и квартир в Улан‑Удэ. Работаем с понятными материалами, точными размерами и расчётом до запуска в производство.</p>
           <ul class="checks">
-            <li>Продумываем хранение, а не только внешний вид</li>
-            <li>Помогаем выбрать практичные сочетания цветов</li>
-            <li>Объясняем стоимость простым и честным языком</li>
+            <li>Шкафы и кухни по индивидуальным размерам</li>
+            <li>Цвета из базового каталога и палитры декоров</li>
+            <li>Замер, проектирование, изготовление и монтаж</li>
           </ul>
         </div>
       </div>
@@ -548,9 +570,9 @@
       <div class="container faq-grid">
         <div><span class="eyebrow">Вопросы и ответы</span><h2>Всё важное — до заказа</h2></div>
         <div class="faq-list">
-          <article class="faq-item open"><button type="button" aria-expanded="true"><span>Цена в конфигураторе окончательная?</span><span>+</span></button><div class="faq-answer"><p>Нет, это ориентир для стандартной комплектации. На итог влияют точные габариты, наполнение, фурнитура, сложность монтажа и выбранный материал.</p></div></article>
+          <article class="faq-item open"><button type="button" aria-expanded="true"><span>Откуда берётся расчёт?</span><span>+</span></button><div class="faq-answer"><p>Это ориентир по открытым предложениям рынка Улан‑Удэ на 2026 год: шкафы от 23 990 ₽/п.м. и кухни от 34 490 ₽/п.м. В расчёт заложена поправка около 12%, а цвет и материал добавляют свою наценку.</p></div></article>
           <article class="faq-item"><button type="button" aria-expanded="false"><span>Можно заказать мебель по своим размерам?</span><span>+</span></button><div class="faq-answer"><p>Да. Конфигуратор помогает выбрать направление, а индивидуальные размеры и внутреннее наполнение обсуждаются перед подготовкой проекта.</p></div></article>
-          <article class="faq-item"><button type="button" aria-expanded="false"><span>Какие материалы можно выбрать?</span><span>+</span></button><div class="faq-answer"><p>В каркасе предусмотрены базовые варианты ЛДСП и МДФ. После получения вашего ассортимента сюда легко добавить конкретные декоры, бренды и доплаты.</p></div></article>
+          <article class="faq-item"><button type="button" aria-expanded="false"><span>Какие цвета и материалы доступны?</span><span>+</span></button><div class="faq-answer"><p>В палитре есть базовые древесные декоры, нейтральные оттенки и основные цвета круга: красный, оранжевый, жёлтый, зелёный, голубой, синий, фиолетовый и розовый. По материалам предусмотрены ЛДСП, Egger, МДФ, эмаль и натуральный шпон.</p></div></article>
           <article class="faq-item"><button type="button" aria-expanded="false"><span>Как оформить заказ?</span><span>+</span></button><div class="faq-answer"><p>Достаточно написать в удобный мессенджер или позвонить. Здесь позднее будут размещены реальные контакты, график и ссылка на консультацию.</p></div></article>
         </div>
       </div>
@@ -558,95 +580,76 @@
 
     <section class="contact-section" id="contacts">
       <div class="container"><div class="contact-card">
-        <div><span class="eyebrow">Готовы обсудить проект?</span><h2>Давайте создадим мебель для вашего дома</h2><p>Вставьте здесь реальные номер телефона, Telegram, WhatsApp или форму связи. Регистрация пользователю не потребуется.</p></div>
+        <div><span class="eyebrow">buyantuev мебель · с 2005 года</span><h2>Давайте создадим шкаф или кухню для вашего дома</h2><p>Вставьте здесь реальные номер телефона, Telegram, WhatsApp или форму связи. Регистрация пользователю не потребуется.</p></div>
         <!-- TODO: замените ссылки-заглушки на реальные способы связи. -->
         <div class="contact-actions"><a class="button-primary" href="tel:+70000000000">Позвонить мастеру</a><a class="button-ghost" href="https://t.me/username" target="_blank" rel="noopener">Написать в Telegram</a></div>
       </div></div>
     </section>
   </main>
 
-  <footer><div class="container footer-inner"><a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"></span>Форма дома</a><span>© <span id="currentYear"></span> · Корпусная мебель на заказ</span><div class="footer-links"><a href="#configurator">Конфигуратор</a><a href="#contacts">Контакты</a></div></div></footer>
+  <footer><div class="container footer-inner"><a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"></span>buyantuev <small>мебель</small></a><span>© <span id="currentYear"></span> · В деле с 2005 года</span><div class="footer-links"><a href="#configurator">Конфигуратор</a><a href="#contacts">Контакты</a></div></div></footer>
 
   <script>
     /* Все данные каталога находятся здесь — сайт работает без БД и внешних интеграций. */
     const catalog = {
-      wardrobe: {
-        name: "Шкаф", shortMaterial: "ЛДСП", base: 47900, className: "furniture--wardrobe",
-        sizes: [
-          { id: "wardrobe-100", label: "1000 × 600 × 2400 мм", extra: 0 },
-          { id: "wardrobe-150", label: "1500 × 600 × 2400 мм", extra: 11900 },
-          { id: "wardrobe-200", label: "2000 × 600 × 2400 мм", extra: 23900 }
-        ]
-      },
-      dresser: {
-        name: "Комод", shortMaterial: "ЛДСП", base: 28900, className: "furniture--dresser",
-        sizes: [
-          { id: "dresser-90", label: "900 × 450 × 850 мм", extra: 0 },
-          { id: "dresser-120", label: "1200 × 450 × 850 мм", extra: 6500 },
-          { id: "dresser-150", label: "1500 × 450 × 850 мм", extra: 12500 }
-        ]
-      },
-      bedside: {
-        name: "Тумба", shortMaterial: "ЛДСП", base: 11900, className: "furniture--bedside",
-        sizes: [
-          { id: "bedside-45", label: "450 × 400 × 500 мм", extra: 0 },
-          { id: "bedside-60", label: "600 × 400 × 500 мм", extra: 2300 },
-          { id: "bedside-80", label: "800 × 400 × 500 мм", extra: 5200 }
-        ]
-      },
-      tv: {
-        name: "ТВ-тумба", shortMaterial: "ЛДСП", base: 20900, className: "furniture--tv",
-        sizes: [
-          { id: "tv-120", label: "1200 × 400 × 500 мм", extra: 0 },
-          { id: "tv-160", label: "1600 × 400 × 500 мм", extra: 5700 },
-          { id: "tv-200", label: "2000 × 400 × 500 мм", extra: 10900 }
-        ]
-      }
+      wardrobe: { name: "Шкаф", className: "furniture--wardrobe", rate: 23990 * 1.12, defaultDimensions: { width: 1200, height: 2400, depth: 600 } },
+      kitchen: { name: "Кухня", className: "furniture--kitchen", rate: 34490 * 1.12, defaultDimensions: { width: 2400, height: 2200, depth: 600 } }
     };
-
+    /* Базовые ориентиры рынка Улан‑Удэ: шкафы от 23 990 ₽/п.м., кухни от 34 490 ₽/п.м.; заложена поправка 12% на 2026 год. */
     const furnitureColors = [
       { id: "natural", label: "Дуб натуральный", hex: "#b48a64", extra: 0, dark: "#805a3e" },
-      { id: "white", label: "Белый матовый", hex: "#e5e1d9", extra: 800, dark: "#a9a49a" },
-      { id: "graphite", label: "Графит", hex: "#515956", extra: 1200, dark: "#303734" },
-      { id: "walnut", label: "Орех", hex: "#6d4937", extra: 2800, dark: "#432a20" },
-      { id: "sage", label: "Шалфей", hex: "#829889", extra: 1600, dark: "#52695a" }
+      { id: "white", label: "Белый", hex: "#f2efe7", extra: 0.02, dark: "#bdb8aa" },
+      { id: "black", label: "Чёрный", hex: "#222222", extra: 0.08, dark: "#090909" },
+      { id: "graphite", label: "Графит", hex: "#515956", extra: 0.07, dark: "#303734" },
+      { id: "grey", label: "Серый", hex: "#9da09b", extra: 0.04, dark: "#6b6d69" },
+      { id: "walnut", label: "Орех", hex: "#6d4937", extra: 0.1, dark: "#432a20" },
+      { id: "oak", label: "Дуб сонома", hex: "#c49a6c", extra: 0.04, dark: "#8e6642" },
+      { id: "ash", label: "Ясень", hex: "#d6c9b1", extra: 0.05, dark: "#9b8d76" },
+      { id: "beige", label: "Бежевый", hex: "#d8c9b5", extra: 0.04, dark: "#a58e74" },
+      { id: "cream", label: "Кремовый", hex: "#e9dfc7", extra: 0.04, dark: "#bcae8f" },
+      { id: "red", label: "Красный", hex: "#c33e36", extra: 0.1, dark: "#7e211e" },
+      { id: "coral", label: "Коралловый", hex: "#f04923", extra: 0.1, dark: "#a82c16" },
+      { id: "orange", label: "Оранжевый", hex: "#dc762c", extra: 0.1, dark: "#994617" },
+      { id: "yellow", label: "Жёлтый", hex: "#e4bd43", extra: 0.08, dark: "#9c7a1b" },
+      { id: "mustard", label: "Горчичный", hex: "#bb9b3d", extra: 0.08, dark: "#80671e" },
+      { id: "green", label: "Зелёный", hex: "#4e765c", extra: 0.1, dark: "#2f4b3a" },
+      { id: "sage", label: "Шалфей", hex: "#829889", extra: 0.08, dark: "#52695a" },
+      { id: "mint", label: "Мятный", hex: "#9fc7b0", extra: 0.1, dark: "#5c8c73" },
+      { id: "blue", label: "Синий", hex: "#3b608b", extra: 0.1, dark: "#233a5b" },
+      { id: "navy", label: "Тёмно-синий", hex: "#243753", extra: 0.12, dark: "#101c2d" },
+      { id: "sky", label: "Голубой", hex: "#91b9c7", extra: 0.08, dark: "#5b8797" },
+      { id: "purple", label: "Фиолетовый", hex: "#765b85", extra: 0.12, dark: "#473650" },
+      { id: "pink", label: "Розовый", hex: "#d596a0", extra: 0.1, dark: "#945b66" },
+      { id: "terracotta", label: "Терракота", hex: "#a95d47", extra: 0.1, dark: "#713829" }
     ];
     const wallColors = [
-      { id: "sand", label: "Песочный", hex: "#e6ded3" },
-      { id: "mist", label: "Серо-зелёный", hex: "#cbd7d1" },
-      { id: "blush", label: "Пыльная роза", hex: "#d9c5bf" },
-      { id: "cream", label: "Сливочный", hex: "#eee8d8" },
-      { id: "blue", label: "Голубой", hex: "#c2d3d9" }
+      { id: "sand", label: "Песочный", hex: "#e6ded3" }, { id: "mist", label: "Серо-зелёный", hex: "#cbd7d1" },
+      { id: "blush", label: "Пыльная роза", hex: "#d9c5bf" }, { id: "cream", label: "Сливочный", hex: "#eee8d8" },
+      { id: "blue", label: "Голубой", hex: "#c2d3d9" }, { id: "white", label: "Белый", hex: "#f4f1e9" },
+      { id: "green", label: "Шалфей", hex: "#b7c6b3" }, { id: "yellow", label: "Солнечный", hex: "#eadcaa" }
     ];
     const materials = {
-      ldsp: { name: "ЛДСП", extra: 0 },
-      egger: { name: "ЛДСП Egger", extra: 5800 },
-      mdf: { name: "МДФ в плёнке", extra: 12400 }
+      ldsp: { name: "ЛДСП стандарт", multiplier: 1 },
+      egger: { name: "ЛДСП Egger", multiplier: 1.16 },
+      mdf: { name: "МДФ в плёнке", multiplier: 1.29 },
+      enamel: { name: "МДФ эмаль матовая", multiplier: 1.42 },
+      veneer: { name: "Шпон натуральный", multiplier: 1.56 }
     };
-    const defaultState = { product: "wardrobe", sizeIndex: 0, material: "ldsp", furnitureColor: "natural", wallColor: "sand", wallType: "paint" };
+    const defaultState = { product: "wardrobe", material: "ldsp", furnitureColor: "natural", wallColor: "sand", wallType: "paint", dimensions: { ...catalog.wardrobe.defaultDimensions } };
     let state = { ...defaultState };
 
     const furnitureStage = document.getElementById("furnitureStage");
     const roomWall = document.getElementById("roomWall");
-    const sizeSelect = document.getElementById("sizeSelect");
     const materialSelect = document.getElementById("materialSelect");
     const priceValue = document.getElementById("priceValue");
     const priceDetails = document.getElementById("priceDetails");
     const sceneCaption = document.getElementById("sceneCaption");
+    const dimensionInputs = { width: document.getElementById("widthInput"), height: document.getElementById("heightInput"), depth: document.getElementById("depthInput") };
 
     function rubles(amount) { return new Intl.NumberFormat("ru-RU").format(amount) + " ₽"; }
     function createFurnitureMarkup(type) {
-      const doors = type === "wardrobe" || type === "tv";
       if (type === "wardrobe") return '<div class="furniture furniture--wardrobe"><div class="body"></div><i class="line"></i><i class="line"></i><i class="handle one"></i><i class="handle two"></i><i class="handle three"></i><i class="handle four"></i><i class="leg a"></i><i class="leg b"></i></div>';
-      if (type === "dresser") return '<div class="furniture furniture--dresser"><div class="body"></div><i class="line one"></i><i class="line two"></i><i class="line three"></i><i class="handle one"></i><i class="handle two"></i><i class="handle three"></i><i class="handle four"></i><i class="leg a"></i><i class="leg b"></i></div>';
-      if (type === "bedside") return '<div class="furniture furniture--bedside"><div class="body"></div><i class="line"></i><i class="handle one"></i><i class="handle two"></i><i class="leg a"></i><i class="leg b"></i></div>';
-      return '<div class="furniture furniture--tv"><div class="body"></div><i class="line one"></i><i class="line two"></i><i class="handle one"></i><i class="handle two"></i><i class="handle three"></i><i class="handle four"></i><i class="leg a"></i><i class="leg b"></i></div>';
-    }
-    function renderSizes() {
-      const sizes = catalog[state.product].sizes;
-      if (state.sizeIndex >= sizes.length) state.sizeIndex = 0;
-      sizeSelect.innerHTML = sizes.map((size, index) => '<option value="' + index + '">' + size.label + '</option>').join("");
-      sizeSelect.value = state.sizeIndex;
+      return '<div class="furniture furniture--kitchen"><div class="upper"></div><div class="base"></div><i class="counter"></i><i class="line a"></i><i class="line b"></i><i class="line c"></i><i class="handle one"></i><i class="handle two"></i><i class="handle three"></i><i class="handle four"></i><i class="sink"></i><i class="stove"></i><i class="leg a"></i><i class="leg b"></i></div>';
     }
     function renderSwatches() {
       const furnitureSwatches = document.getElementById("furnitureSwatches");
@@ -656,34 +659,51 @@
     }
     function render() {
       const product = catalog[state.product];
-      const size = product.sizes[state.sizeIndex];
       const furnitureColor = furnitureColors.find(c => c.id === state.furnitureColor);
       const wallColor = wallColors.find(c => c.id === state.wallColor);
       const material = materials[state.material];
-      const total = product.base + size.extra + furnitureColor.extra + material.extra;
+      const { width, height, depth } = state.dimensions;
+      const colorMultiplier = 1 + furnitureColor.extra;
+      const minimum = state.product === "kitchen" ? 92900 : 32900;
+      const total = Math.max(minimum, Math.round(product.rate * (width / 1000) * (height / product.defaultDimensions.height) * (depth / product.defaultDimensions.depth) * material.multiplier * colorMultiplier / 100) * 100);
 
       furnitureStage.innerHTML = createFurnitureMarkup(state.product);
+      Object.entries(dimensionInputs).forEach(([key, input]) => { input.value = state.dimensions[key]; });
+      furnitureStage.style.setProperty("--model-scale-width", Math.max(.78, Math.min(1.15, width / product.defaultDimensions.width)));
+      furnitureStage.style.transform = "translateX(-50%) scale(" + Math.max(.75, Math.min(1.12, width / product.defaultDimensions.width)) + ", " + Math.max(.75, Math.min(1.12, height / product.defaultDimensions.height)) + ")";
       document.documentElement.style.setProperty("--furniture-color", furnitureColor.hex);
       document.documentElement.style.setProperty("--furniture-dark", furnitureColor.dark);
       document.documentElement.style.setProperty("--wall-color", wallColor.hex);
       roomWall.className = "wall" + (state.wallType === "paint" ? "" : " is-" + state.wallType);
       priceValue.textContent = "от " + rubles(total);
-      priceDetails.textContent = product.name + " · " + size.label + " · " + material.name;
+      priceDetails.textContent = product.name + " · " + width + " × " + depth + " × " + height + " мм · " + material.name;
       sceneCaption.textContent = product.name + " из " + material.name + " в оттенке «" + furnitureColor.label + "»";
       document.querySelectorAll(".product-tab").forEach(btn => btn.classList.toggle("active", btn.dataset.product === state.product));
       document.querySelectorAll(".type-chip").forEach(btn => btn.classList.toggle("active", btn.dataset.wallType === state.wallType));
       materialSelect.value = state.material;
       renderSwatches();
     }
-    function resetConfigurator() { state = { ...defaultState }; renderSizes(); render(); }
+    function resetConfigurator() { state = { ...defaultState, dimensions: { ...catalog.wardrobe.defaultDimensions } }; render(); }
 
     document.getElementById("productTabs").addEventListener("click", (event) => {
       const button = event.target.closest("[data-product]");
       if (!button) return;
-      state.product = button.dataset.product; state.sizeIndex = 0; renderSizes(); render();
+      state.product = button.dataset.product; state.dimensions = { ...catalog[state.product].defaultDimensions }; render();
     });
-    sizeSelect.addEventListener("change", () => { state.sizeIndex = Number(sizeSelect.value); render(); });
     materialSelect.addEventListener("change", () => { state.material = materialSelect.value; render(); });
+    function setDimension(key, value) {
+      const limits = { width: [600, 4000], height: [700, 3000], depth: [300, 800] }[key];
+      state.dimensions[key] = Math.max(limits[0], Math.min(limits[1], Math.round(Number(value) / 50) * 50));
+      render();
+    }
+    document.getElementById("dimensionControls").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-dim]"); if (!button) return;
+      setDimension(button.dataset.dim, state.dimensions[button.dataset.dim] + Number(button.dataset.step));
+    });
+    Object.entries(dimensionInputs).forEach(([key, input]) => {
+      input.addEventListener("change", () => setDimension(key, input.value));
+      input.addEventListener("wheel", (event) => { event.preventDefault(); setDimension(key, state.dimensions[key] + (event.deltaY < 0 ? 50 : -50)); }, { passive: false });
+    });
     document.getElementById("furnitureSwatches").addEventListener("click", (event) => {
       const button = event.target.closest("[data-color]"); if (!button) return; state.furnitureColor = button.dataset.color; render();
     });
@@ -700,7 +720,7 @@
       if (!wasOpen) { item.classList.add("open"); button.setAttribute("aria-expanded", "true"); }
     }));
     document.getElementById("currentYear").textContent = new Date().getFullYear();
-    renderSizes(); render();
+    render();
 
   </script>
 </body>
