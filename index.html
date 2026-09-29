@@ -7,7 +7,9 @@
   <title>buyantuev мебель — шкафы на заказ</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <meta name="theme-color" content="#f7f6f2" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <noscript><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" /></noscript>
   <style>
     :root {
       --ink: #1f2a25;
@@ -552,24 +554,15 @@
     .section-tab { border-color: #d7d1c7; }
     .section-tab.active { border-color: #78a291; background: #edf4f0; }
     .editor-hint { margin: 10px 0 0; color: #8b857b; font-size: 9px; line-height: 1.45; }
-    .feature-toolbar { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 10px; }
-    .feature-toolbar .type-chip { min-height: 37px; }
     .hardware-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .hardware-grid select { min-height: 40px; font-size: 10px; }
     .editor-cabinet { transform-style: preserve-3d; }
     .editor-cabinet::before, .editor-cabinet::after { content: ""; position: absolute; z-index: 5; top: 3px; bottom: 3px; width: var(--depth-visual, 26px); background: linear-gradient(90deg, color-mix(in srgb, var(--furniture-dark) 72%, #fff), var(--furniture-color)); opacity: .95; pointer-events: none; }
     .editor-cabinet::before { left: calc(var(--depth-visual, 26px) * -1); transform-origin: right center; transform: skewY(-12deg); border-radius: 3px 0 0 3px; }
     .editor-cabinet::after { right: calc(var(--depth-visual, 26px) * -1); transform-origin: left center; transform: skewY(12deg); border-radius: 0 3px 3px 0; }
-    .editor-mezzanine { position: absolute; z-index: 2; left: 3%; right: 3%; bottom: 91%; height: 13%; display: none; border: 3px solid color-mix(in srgb, var(--furniture-dark) 58%, #a99884); border-radius: 3px; background: linear-gradient(90deg, color-mix(in srgb, var(--furniture-color) 75%, #fff), var(--furniture-color)); box-shadow: 7px 8px 10px rgba(55,38,23,.14); }
-    .editor-mezzanine span { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(66,45,28,.24); }
-    .editor-mezzanine span:first-child { left: 33%; }.editor-mezzanine span:last-child { left: 66%; }
-    .editor-mezzanine.is-visible { display: block; }
-    .editor-corner { position: absolute; z-index: 1; right: -19%; bottom: 0; width: 28%; height: 86%; display: none; border-left: 3px solid color-mix(in srgb, var(--furniture-dark) 58%, #a99884); border-top: 3px solid color-mix(in srgb, var(--furniture-dark) 58%, #a99884); background: linear-gradient(90deg, color-mix(in srgb, var(--furniture-color) 66%, #fff), var(--furniture-color)); transform: skewY(-7deg); box-shadow: 8px 10px 11px rgba(55,38,23,.12); }
-    .editor-corner.is-visible { display: block; }
-    .editor-corner::after { content: ""; position: absolute; left: 50%; top: 7%; bottom: 7%; width: 1px; background: rgba(66,45,28,.25); }
     .scene.mode-3d .editor-cabinet { transform: rotateY(var(--camera-y, 0deg)) rotateX(var(--camera-x, 0deg)); }
     .scene.mode-compose .editor-cabinet { transform: rotateY(calc(var(--camera-y, 0deg) - 9deg)) rotateX(calc(var(--camera-x, 0deg) + 2deg)); }
-    @media (max-width: 759px) { .feature-toolbar, .hardware-grid { grid-template-columns: 1fr; } .camera-tools { top: 13px; right: 13px; } }
+    @media (max-width: 759px) { .hardware-grid { grid-template-columns: 1fr; } .camera-tools { top: 13px; right: 13px; } }
     .editor-cabinet { border: 3px solid color-mix(in srgb, var(--furniture-dark) 62%, #8b7a68); background: color-mix(in srgb, var(--furniture-color) 78%, #5f4734); box-shadow: inset 0 0 0 1px rgba(255,255,255,.26), 10px 14px 18px rgba(51,35,22,.16); }
     .editor-section { border-right: 1px solid color-mix(in srgb, var(--furniture-dark) 58%, #c7b7a4); }
     .editor-door { border: 1px solid rgba(49,31,19,.18); box-shadow: inset 1px 0 rgba(255,255,255,.2); }
@@ -589,6 +582,45 @@
       .about-grid { grid-template-columns: .9fr 1.1fr; }
       .contact-card { display: grid; }
       .contact-actions { display: flex; margin-top: 0; }
+    }
+
+    /* ===== 3D-комната, мобильная адаптация, производительность ===== */
+    .wall, .floor, .room-details, .furniture-shadow, .legacy-stage, .scene-lighting { display: none !important; }
+    .scene { perspective: none; touch-action: pan-y; }
+    #threeCanvas { touch-action: pan-y; cursor: grab; outline: none; -webkit-tap-highlight-color: transparent; }
+    #threeCanvas:focus-visible { outline: 2px solid var(--forest); outline-offset: -2px; }
+    .scene.is-dragging #threeCanvas { cursor: grabbing; }
+    .scene-area { background: linear-gradient(180deg, #efe9df, #e2dbcf); }
+    html { -webkit-text-size-adjust: 100%; }
+    body { overflow-x: clip; }
+    img, canvas, svg, video { max-width: 100%; }
+    .steps, #about, .faq-section, .contact-section, footer { content-visibility: auto; contain-intrinsic-size: auto 700px; }
+    @media (max-width: 759px) {
+      .site-header { backdrop-filter: none; -webkit-backdrop-filter: none; }
+      .scene-area { min-height: 380px; min-height: clamp(340px, 62svh, 520px); }
+      .scene-label { top: 58px; left: 12px; padding: 6px 10px; font-size: 10px; }
+      .camera-tools { top: 12px; right: 12px; left: auto; }
+      .scene-caption { left: 12px; right: 12px; bottom: 12px; max-width: none; padding: 8px 10px; font-size: 10px; }
+      .controls-panel { padding: 20px 16px; }
+      input, select, textarea { font-size: 16px !important; }
+      .section-list, .swatches { -webkit-overflow-scrolling: touch; }
+    }
+    @media (pointer: coarse) {
+      .swatch { width: 34px; height: 34px; }
+      .swatches { gap: 10px; }
+      .camera-tools button { width: 38px; height: 38px; font-size: 18px; }
+      .type-chip, .section-tab, .compact-button, .reset-button { min-height: 40px; }
+    }
+
+    /* Сцена «прилипает» к экрану, пока листаются настройки (иначе на длинной панели видно пустой фон) */
+    .configurator-section, .configurator-shell { overflow: clip; }
+    @media (min-width: 760px) {
+      .configurator-shell { background: linear-gradient(90deg, #e7e1d8 calc(100% - 360px), #fff 0); }
+      .scene-area { position: sticky; top: 92px; align-self: start; height: min(calc(100vh - 108px), 820px); min-height: 480px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
     }
   </style>
 </head>
@@ -649,7 +681,7 @@
         </div>
         <div class="configurator-shell">
           <div class="scene-area">
-              <div class="scene-label"><i></i><span>Перетащите, чтобы повернуть</span></div>
+              <div class="scene-label"><i></i><span>Перетащите, чтобы повернуть комнату</span></div>
               <div class="camera-tools" aria-label="Управление камерой"><button id="cameraMinus" type="button" aria-label="Уменьшить масштаб">−</button><output id="cameraZoomValue">100%</output><button id="cameraPlus" type="button" aria-label="Увеличить масштаб">+</button><button id="cameraReset" type="button" aria-label="Сбросить камеру">↺</button><button id="cameraFullscreen" type="button" aria-label="На весь экран">⛶</button></div>
             <div class="scene">
               <div class="wall" id="roomWall"></div>
@@ -657,7 +689,7 @@
               <div class="room-details" aria-hidden="true"><div class="ceiling-bulb"></div><div class="baseboard"></div><div class="rug"></div></div>
               <div class="scene-lighting" id="sceneLighting" aria-hidden="true"></div>
               <div class="furniture-shadow"></div>
-              <div class="furniture-stage legacy-stage" id="furnitureStage" aria-hidden="true"></div><canvas id="threeCanvas" aria-label="Интерактивная 3D-модель шкафа"></canvas>
+              <canvas id="threeCanvas" aria-label="Интерактивная 3D-комната со шкафом (стрелки влево/вправо — повернуть)"></canvas>
             </div>
             <p class="scene-caption" id="sceneCaption">Шкаф из ЛДСП в оттенке «Дуб натуральный»</p>
           </div>
@@ -680,7 +712,7 @@
             <div class="control-group editor-tools">
               <span class="control-label">Редактор шкафа</span>
               <div class="editor-modes" id="editorModes"><button class="type-chip active" type="button" data-mode="3d">3D</button><button class="type-chip" type="button" data-mode="compose">Композиция</button><button class="type-chip" type="button" data-mode="details">Детали</button></div>
-              <div class="section-toolbar"><button class="button-ghost compact-button" id="addSection" type="button">+ Секция</button><button class="button-ghost compact-button" id="duplicateSection" type="button">Дублировать</button><button class="button-ghost compact-button" id="removeSection" type="button">Удалить</button></div><div class="feature-toolbar"><button class="type-chip" id="mezzanineToggle" type="button">+ Антресоль</button><button class="type-chip" id="cornerToggle" type="button">+ Угловой модуль</button></div>
+              <div class="section-toolbar"><button class="button-ghost compact-button" id="addSection" type="button">+ Секция</button><button class="button-ghost compact-button" id="duplicateSection" type="button">Дублировать</button><button class="button-ghost compact-button" id="removeSection" type="button">Удалить</button></div>
               <div class="section-list" id="sectionList" aria-label="Секции шкафа"></div>
               <div class="section-settings" id="sectionSettings"></div>
               <p class="editor-hint" id="editorHint">Проект сохраняется в браузере автоматически.</p>
@@ -881,12 +913,10 @@
       { id: 2, width: 600, shelves: 2, drawers: 0, facade: "door" }
     ];
     const hardware = { handles: { basic: { name: "Базовые, чёрные", price: 0 }, profile: { name: "Профиль Gola", price: 6500 }, brass: { name: "Латунные", price: 4800 }, soft: { name: "Минималистичные", price: 2800 } }, hinges: { standard: { name: "Стандартные", price: 0 }, softclose: { name: "С доводчиком", price: 4200 }, premium: { name: "Премиум с доводчиком", price: 7900 } } };
-    const defaultState = { product: "wardrobe", material: "ldsp", furnitureColor: "natural", wallColor: "sand", wallType: "paint", floorColor: "oak", floorType: "laminate", lightType: "warm", lightStrength: 65, editorMode: "3d", selectedSection: 0, nextSectionId: 3, camera: { x: 0, y: 0, zoom: 1 }, hardware: { handles: "basic", hinges: "standard" }, mezzanine: false, corner: false, sections: defaultSections, dimensions: { ...catalog.wardrobe.defaultDimensions } };
+    const defaultState = { product: "wardrobe", material: "ldsp", furnitureColor: "natural", wallColor: "sand", wallType: "paint", floorColor: "oak", floorType: "laminate", lightType: "warm", lightStrength: 65, editorMode: "3d", selectedSection: 0, nextSectionId: 3, camera: { x: 0, y: 0, zoom: 1 }, hardware: { handles: "basic", hinges: "standard" }, sections: defaultSections, dimensions: { ...catalog.wardrobe.defaultDimensions } };
     let state = (() => { try { const saved = JSON.parse(localStorage.getItem("buyantuev-editor-v1")); return saved ? { ...defaultState, ...saved, hardware: { ...defaultState.hardware, ...(saved.hardware || {}) }, camera: { ...defaultState.camera, ...(saved.camera || {}) }, dimensions: { ...defaultState.dimensions, ...(saved.dimensions || {}) }, sections: Array.isArray(saved.sections) && saved.sections.length ? saved.sections : defaultSections.map(section => ({ ...section })) } : { ...defaultState, sections: defaultSections.map(section => ({ ...section })) }; } catch (error) { return { ...defaultState, sections: defaultSections.map(section => ({ ...section })) }; } })();
 
-    const furnitureStage = document.getElementById("furnitureStage");
-    let editorMezzanine = document.getElementById("editorMezzanine");
-    let editorCorner = document.getElementById("editorCorner");
+    delete state.mezzanine; delete state.corner; /* чистим старые сохранения из localStorage */
     const handleSelect = document.getElementById("handleSelect");
     const hingeSelect = document.getElementById("hingeSelect");
     const roomWall = document.getElementById("roomWall");
@@ -898,18 +928,6 @@
     const dimensionInputs = { width: document.getElementById("widthInput"), height: document.getElementById("heightInput"), depth: document.getElementById("depthInput") };
 
     function rubles(amount) { return new Intl.NumberFormat("ru-RU").format(amount) + " ₽"; }
-    function createFurnitureMarkup() {
-      return '<div class="furniture furniture--wardrobe"><div class="editor-mezzanine" id="editorMezzanine" aria-hidden="true"><span></span><span></span></div><div class="editor-cabinet" id="editorCabinet"></div><div class="editor-corner" id="editorCorner" aria-hidden="true"></div><i class="leg a"></i><i class="leg b"></i></div>';
-    }
-    function sectionMarkup(section) {
-      const shelves = Array.from({ length: section.shelves }, (_, i) => '<i class="editor-shelf" style="top:' + ((i + 1) / (section.shelves + 1) * 100) + '%"></i>').join("");
-      const drawers = Array.from({ length: section.drawers }, (_, i) => '<i class="editor-drawer" style="top:' + (8 + i * (76 / Math.max(section.drawers, 1))) + '%"></i>').join("");
-      return '<div class="editor-section" data-section-id="' + section.id + '" data-facade="' + section.facade + '" style="flex-grow:' + section.width + '"><div class="editor-back"></div>' + shelves + drawers + '<i class="editor-door"></i></div>';
-    }
-    function renderEditorModel() {
-      const cabinet = document.getElementById("editorCabinet");
-      if (cabinet) cabinet.innerHTML = state.sections.map(sectionMarkup).join("");
-    }
     function renderEditorControls() {
       const list = document.getElementById("sectionList");
       list.innerHTML = state.sections.map((section, index) => '<button type="button" class="section-tab ' + (index === state.selectedSection ? "active" : "") + '" data-section-index="' + index + '">Секция ' + (index + 1) + '</button>').join("");
@@ -917,13 +935,15 @@
       document.getElementById("sectionSettings").innerHTML = '<label class="editor-field">Ширина, мм<input class="editor-number" id="sectionWidth" type="number" min="250" max="2000" step="50" value="' + section.width + '"></label><label class="editor-field">Полки<input class="editor-number" id="sectionShelves" type="number" min="0" max="8" step="1" value="' + section.shelves + '"></label><label class="editor-field">Фасад<select class="editor-select" id="sectionFacade"><option value="door" ' + (section.facade === "door" ? "selected" : "") + '>Дверь</option><option value="open" ' + (section.facade === "open" ? "selected" : "") + '>Открытая</option><option value="glass" ' + (section.facade === "glass" ? "selected" : "") + '>Стекло</option></select></label>';
       document.querySelectorAll("[data-mode]").forEach(button => button.classList.toggle("active", button.dataset.mode === state.editorMode));
     }
+    let swatchesBuilt = false;
     function renderSwatches() {
-      const furnitureSwatches = document.getElementById("furnitureSwatches");
-      furnitureSwatches.innerHTML = unifiedColors.map(color => '<button type="button" class="swatch ' + (state.furnitureColor === color.id ? "active" : "") + '" data-color="' + color.id + '" style="--swatch:' + color.hex + '" aria-label="Цвет мебели: ' + color.label + '" title="' + color.label + '"></button>').join("");
-      const wallSwatches = document.getElementById("wallSwatches");
-      wallSwatches.innerHTML = unifiedColors.map(color => '<button type="button" class="swatch ' + (state.wallColor === color.id ? "active" : "") + '" data-color="' + color.id + '" style="--swatch:' + color.hex + '" aria-label="Цвет стены: ' + color.label + '" title="' + color.label + '"></button>').join("");
-      const floorSwatches = document.getElementById("floorSwatches");
-      floorSwatches.innerHTML = unifiedColors.map(color => '<button type="button" class="swatch ' + (state.floorColor === color.id ? "active" : "") + '" data-color="' + color.id + '" style="--swatch:' + color.hex + '" aria-label="Цвет пола: ' + color.label + '" title="' + color.label + '"></button>').join("");
+      /* Кнопки строим один раз, дальше только переключаем active — раньше пересобиралось ~130 кнопок на каждое изменение */
+      [["furnitureSwatches", "furnitureColor", "Цвет мебели"], ["wallSwatches", "wallColor", "Цвет стены"], ["floorSwatches", "floorColor", "Цвет пола"]].forEach(([id, key, label]) => {
+        const holder = document.getElementById(id);
+        if (!swatchesBuilt) holder.innerHTML = unifiedColors.map(color => '<button type="button" class="swatch" data-color="' + color.id + '" style="--swatch:' + color.hex + '" aria-label="' + label + ': ' + color.label + '" title="' + color.label + '"></button>').join("");
+        holder.querySelectorAll(".swatch").forEach(button => button.classList.toggle("active", button.dataset.color === state[key]));
+      });
+      swatchesBuilt = true;
     }
     function render() {
       const product = catalog[state.product];
@@ -935,24 +955,10 @@
       const colorMultiplier = 1 + (furnitureColor.extra || 0);
       const sectionFeatures = state.sections.reduce((sum, section) => sum + section.shelves * 450 + (section.facade === "glass" ? 4200 : section.facade === "open" ? -900 : 0), 0);
       const hardwarePrice = hardware.handles[state.hardware.handles].price + hardware.hinges[state.hardware.hinges].price;
-      const featurePrice = (state.mezzanine ? 14500 : 0) + (state.corner ? 19800 : 0);
-      const total = Math.max(32900, Math.round((product.rate * (width / 1000) * (height / product.defaultDimensions.height) * (depth / product.defaultDimensions.depth) * material.multiplier * colorMultiplier + sectionFeatures + hardwarePrice + featurePrice) / 100) * 100);
+      const total = Math.max(32900, Math.round((product.rate * (width / 1000) * (height / product.defaultDimensions.height) * (depth / product.defaultDimensions.depth) * material.multiplier * colorMultiplier + sectionFeatures + hardwarePrice) / 100) * 100);
 
-      if (!furnitureStage.firstElementChild) { furnitureStage.innerHTML = createFurnitureMarkup(); editorMezzanine = document.getElementById("editorMezzanine"); editorCorner = document.getElementById("editorCorner"); }
-      renderEditorModel();
       renderEditorControls();
       Object.entries(dimensionInputs).forEach(([key, input]) => { input.value = state.dimensions[key]; });
-      const widthRatio = (width - 600) / (4000 - 600);
-      const heightRatio = (height - 700) / (3000 - 700);
-      const widthScale = .58 + widthRatio * .9;
-      const heightScale = .62 + heightRatio * .72;
-      const depthScale = .72 + ((depth - 300) / (800 - 300)) * .46;
-      const depthAngle = (depthScale - 1) * -10;
-      const depthZoom = (depthScale - 1) * 150;
-      furnitureStage.style.setProperty("--depth-visual", Math.round(18 + depthScale * 22) + "px");
-      furnitureStage.style.setProperty("--model-scale-width", widthScale);
-      furnitureStage.style.setProperty("--model-scale-height", heightScale);
-      furnitureStage.style.transform = "translate3d(-50%, 0, " + depthZoom + "px) scale(" + (widthScale * state.camera.zoom) + ", " + (heightScale * state.camera.zoom) + ") rotateX(" + state.camera.x + "deg) rotateY(" + (depthAngle + state.camera.y) + "deg)";
       document.documentElement.style.setProperty("--furniture-color", furnitureColor.hex);
       document.documentElement.style.setProperty("--furniture-dark", furnitureColor.dark || "#6b5b4d");
       document.documentElement.style.setProperty("--wall-color", wallColor.hex);
@@ -964,10 +970,6 @@
       roomWall.className = "wall" + (state.wallType === "paint" ? "" : " is-" + state.wallType);
       roomFloor.className = "floor is-" + state.floorType;
       document.querySelector(".scene").className = "scene mode-" + state.editorMode;
-      editorMezzanine.classList.toggle("is-visible", state.mezzanine);
-      editorCorner.classList.toggle("is-visible", state.corner);
-      document.getElementById("mezzanineToggle").classList.toggle("active", state.mezzanine);
-      document.getElementById("cornerToggle").classList.toggle("active", state.corner);
       handleSelect.value = state.hardware.handles;
       hingeSelect.value = state.hardware.hinges;
       priceValue.textContent = "от " + rubles(total);
@@ -990,8 +992,6 @@
     materialSelect.addEventListener("change", () => { state.material = materialSelect.value; render(); });
     handleSelect.addEventListener("change", () => { state.hardware.handles = handleSelect.value; render(); });
     hingeSelect.addEventListener("change", () => { state.hardware.hinges = hingeSelect.value; render(); });
-    document.getElementById("mezzanineToggle").addEventListener("click", () => { state.mezzanine = !state.mezzanine; render(); });
-    document.getElementById("cornerToggle").addEventListener("click", () => { state.corner = !state.corner; render(); });
     document.getElementById("editorModes").addEventListener("click", (event) => {
       const button = event.target.closest("[data-mode]"); if (!button) return; state.editorMode = button.dataset.mode; if (state.editorMode === "3d") state.camera = { ...defaultState.camera }; render();
     });
@@ -1039,7 +1039,7 @@
     });
     Object.entries(dimensionInputs).forEach(([key, input]) => {
       input.addEventListener("change", () => setDimension(key, input.value));
-      input.addEventListener("wheel", (event) => { event.preventDefault(); setDimension(key, state.dimensions[key] + (event.deltaY < 0 ? 50 : -50)); }, { passive: false });
+      input.addEventListener("wheel", (event) => { if (document.activeElement !== input) return; event.preventDefault(); setDimension(key, state.dimensions[key] + (event.deltaY < 0 ? 50 : -50)); }, { passive: false });
     });
     document.getElementById("furnitureSwatches").addEventListener("click", (event) => {
       const button = event.target.closest("[data-color]"); if (!button) return; state.furnitureColor = button.dataset.color; render();
