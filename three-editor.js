@@ -230,6 +230,24 @@ function buildRoom(state, dims) {
   const b3 = new THREE.Mesh(new THREE.BoxGeometry(bt, bh, d), bb()); b3.position.set(w / 2 - bt / 2, bh / 2, 0);
   roomGroup.add(b1, b2, b3);
 
+
+  /* Подиум: комната стоит на плите, как макет на подставке, и вращается на тёмном фоне */
+  const slab = new THREE.Mesh(new THREE.BoxGeometry(w + 0.56, 0.16, d + 0.56), new THREE.MeshStandardMaterial({ color: 0xd8d0c2, roughness: 0.78 }));
+  slab.position.set(0, -0.082, 0.0);
+  slab.receiveShadow = true;
+  roomGroup.add(slab);
+  const glow = document.createElement('canvas');
+  glow.width = glow.height = 128;
+  const gg = glow.getContext('2d');
+  const grad = gg.createRadialGradient(64, 64, 8, 64, 64, 64);
+  grad.addColorStop(0, 'rgba(0,0,0,.55)'); grad.addColorStop(1, 'rgba(0,0,0,0)');
+  gg.fillStyle = grad; gg.fillRect(0, 0, 128, 128);
+  const shadowTex = new THREE.CanvasTexture(glow);
+  const blob = new THREE.Mesh(new THREE.PlaneGeometry((w + 0.56) * 1.9, (d + 0.56) * 1.9), new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false }));
+  blob.rotation.x = -Math.PI / 2;
+  blob.position.y = -0.165;
+  roomGroup.add(blob);
+
   /* Центр вращения — центр комнаты; смотрим чуть выше середины, чтобы шкаф сидел ниже в кадре */
   target.set(0, h * 0.52 + 0.08, 0);
 }
@@ -256,10 +274,10 @@ function buildModel(state, dims) {
 
   let cursor = -W / 2 + panel;
   for (const section of normalizeSections(state)) {
-    const sw = W * section.ratio;
+    const sw = (W - panel * 2) * section.ratio; /* секции делят только внутреннюю ширину — раньше последняя вылезала за правую стенку */
     const x = cursor + sw / 2;
     if (cursor > -W / 2 + panel + 0.001) box(panel, H - panel * 2, D - 0.04, edge, cursor, H / 2, 0);
-    const innerW = Math.max(0.18, sw - panel * 1.4);
+    const innerW = Math.max(0.18, sw - 0.004);
     const shelves = Math.min(8, Math.max(0, Number(section.shelves || 0)));
     for (let i = 1; i <= shelves; i++) box(innerW, panel * 0.72, D - 0.09, body, x, panel + (H - panel * 2) * i / (shelves + 1), 0.005);
     const drawers = 0;
@@ -289,8 +307,8 @@ function buildModel(state, dims) {
 function fit() {
   const vFov = THREE.MathUtils.degToRad(camera.fov);
   const hFov = 2 * Math.atan(Math.tan(vFov / 2) * camera.aspect);
-  const needV = (roomSize.h * 1.18) / (2 * Math.tan(vFov / 2));
-  const needH = (roomSize.w * 1.08) / (2 * Math.tan(hFov / 2));
+  const needV = ((roomSize.h + 0.7) * 1.3) / (2 * Math.tan(vFov / 2));
+  const needH = ((roomSize.w + 0.6) * 1.32) / (2 * Math.tan(hFov / 2));
   fitDistance = Math.max(4, needV, needH);
 }
 function syncCamera() {

@@ -622,6 +622,55 @@
       html { scroll-behavior: auto; }
       *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
     }
+
+    /* ===== Фон под комнатой ===== */
+    .scene-area { background: radial-gradient(ellipse at 50% 36%, #3a4d56 0%, #26343b 52%, #1b252a 100%); }
+    .scene-caption { box-shadow: 0 8px 24px rgba(0,0,0,.25); }
+    .camera-tools { background: rgba(255,253,248,.94); }
+    @media (min-width: 760px) {
+      .configurator-shell { background: linear-gradient(90deg, #1b252a calc(100% - 360px), #fff 0); }
+    }
+
+    /* ===== Окно «Связаться» ===== */
+    .button-primary, .button-ghost, .header-cta { font-family: inherit; cursor: pointer; }
+    .contact-actions button { min-height: 48px; padding: 0 24px; }
+    .contact-modal { box-sizing: border-box; width: min(440px, calc(100vw - 32px)); max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px); margin: auto; padding: 0; color: var(--ink); border: 0; border-radius: 24px; background: #fffdf8; box-shadow: 0 30px 80px rgba(14,22,26,.5); overflow: auto; overscroll-behavior: contain; }
+    .contact-modal::backdrop { background: rgba(14,22,26,.6); }
+    .contact-modal[open] { animation: cm-pop .22s cubic-bezier(.2,.8,.2,1); }
+    .contact-modal[open]::backdrop { animation: cm-fade .22s ease-out; }
+    @keyframes cm-pop { from { opacity: 0; transform: translateY(14px) scale(.97); } to { opacity: 1; transform: none; } }
+    @keyframes cm-fade { from { opacity: 0; } to { opacity: 1; } }
+    .cm-sheet { position: relative; padding: 30px 26px 26px; }
+    .cm-grab { display: none; }
+    .cm-sheet h2 { margin: 8px 0 8px; padding-right: 44px; font-size: 26px; line-height: 1.12; letter-spacing: -.03em; }
+    .cm-lead { margin: 0 0 20px; color: var(--muted); font-size: 13px; line-height: 1.55; }
+    .cm-close { position: absolute; top: 14px; right: 14px; display: grid; width: 44px; height: 44px; place-items: center; padding: 0; color: var(--ink); border: 1px solid var(--line); border-radius: 50%; background: #fff; cursor: pointer; transition: background .2s, transform .2s; }
+    .cm-close:hover { background: #f1ece3; }
+    .cm-close:focus-visible, .cm-row:focus-visible { outline: 2px solid var(--forest); outline-offset: 2px; }
+    .cm-list { display: grid; gap: 10px; }
+    .cm-row { display: flex; min-height: 64px; align-items: center; gap: 14px; padding: 10px 16px 10px 12px; color: var(--ink); text-decoration: none; border: 1px solid var(--line); border-radius: 16px; background: #fff; transition: border-color .2s, background .2s, transform .2s; -webkit-tap-highlight-color: transparent; }
+    a.cm-row:hover { border-color: var(--forest); background: #f6faf7; transform: translateY(-1px); }
+    a.cm-row:active { transform: scale(.99); }
+    .cm-row.is-empty { opacity: .55; }
+    .cm-ico { display: grid; width: 44px; height: 44px; flex: none; place-items: center; color: #fff; border-radius: 13px; background: var(--forest); }
+    .cm-ico svg { width: 22px; height: 22px; }
+    .cm-row[data-kind="telegram"] .cm-ico { background: #2a9bd6; }
+    .cm-row[data-kind="instagram"] .cm-ico { background: linear-gradient(135deg, #f5a623, #e1306c 55%, #7b3fe4); }
+    .cm-row[data-kind="max"] .cm-ico { background: linear-gradient(135deg, #3d7bff, #8a46ff); }
+    .cm-text { display: grid; min-width: 0; flex: 1; gap: 2px; }
+    .cm-label { color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .02em; }
+    .cm-value { overflow: hidden; font-size: 16px; font-weight: 800; letter-spacing: -.02em; text-overflow: ellipsis; white-space: nowrap; }
+    .cm-arrow { flex: none; color: var(--muted); font-size: 18px; }
+    @media (max-width: 759px) {
+      /* На телефоне окно выезжает снизу, как шторка */
+      .contact-modal { width: 100%; max-width: none; margin: auto 0 0; border-radius: 24px 24px 0 0; max-height: 92vh; max-height: 92dvh; }
+      .contact-modal[open] { animation: cm-sheet .26s cubic-bezier(.2,.8,.2,1); }
+      @keyframes cm-sheet { from { transform: translateY(100%); } to { transform: none; } }
+      .cm-sheet { padding: 12px 18px calc(22px + env(safe-area-inset-bottom, 0px)); }
+      .cm-grab { display: block; width: 42px; height: 4px; margin: 0 auto 16px; border-radius: 4px; background: #d8d1c4; }
+      .cm-sheet h2 { font-size: 23px; }
+      .cm-close { top: 18px; right: 14px; }
+    }
   </style>
 </head>
 <body>
@@ -634,8 +683,7 @@
         <a href="#about">О мастерской</a>
         <a href="#faq">Вопросы</a>
       </nav>
-      <!-- TODO: вставить реальную ссылку на мессенджер или номер телефона. -->
-      <a class="editor-link" href="editor.html#configurator">Открыть редактор</a><a class="header-cta" href="#contacts">Рассчитать проект</a>
+      <a class="editor-link" href="editor.html#configurator">Открыть редактор</a><a class="header-cta" href="#contacts" data-contact-open>Рассчитать проект</a>
     </div>
   </header>
 
@@ -778,7 +826,7 @@
               <span class="estimate-note">Ориентировочная цена</span>
               <strong class="estimate-value" id="priceValue">от 47 900 ₽</strong>
               <span class="estimate-details" id="priceDetails">Шкаф · 1200 × 600 × 2400 мм · ЛДСП</span>
-              <a href="#contacts" class="button-primary">Запросить точный расчёт</a>
+              <a href="#contacts" class="button-primary" data-contact-open>Запросить точный расчёт</a>
             </div>
             <p class="price-disclaimer">Ориентир для Улан‑Удэ на 2026 год с поправкой +10–15% на декор. Точная смета зависит от фурнитуры, наполнения, доставки и монтажа.</p>
           </aside>
@@ -817,24 +865,35 @@
       <div class="container faq-grid">
         <div><span class="eyebrow">Вопросы и ответы</span><h2>Всё важное — до заказа</h2></div>
         <div class="faq-list">
-          <article class="faq-item open"><button type="button" aria-expanded="true"><span>Откуда берётся расчёт?</span><span>+</span></button><div class="faq-answer"><p>Это ориентир по открытым предложениям рынка Улан‑Удэ на 2026 год: распашные шкафы — от 23 990 ₽/п.м. В расчёт заложена поправка около 12%, а цвет и материал добавляют свою наценку.</p></div></article>
           <article class="faq-item"><button type="button" aria-expanded="false"><span>Можно заказать мебель по своим размерам?</span><span>+</span></button><div class="faq-answer"><p>Да. Конфигуратор помогает выбрать направление, а индивидуальные размеры и внутреннее наполнение обсуждаются перед подготовкой проекта.</p></div></article>
           <article class="faq-item"><button type="button" aria-expanded="false"><span>Какие цвета и материалы доступны?</span><span>+</span></button><div class="faq-answer"><p>В палитре есть базовые древесные декоры, нейтральные оттенки и основные цвета круга: красный, оранжевый, жёлтый, зелёный, голубой, синий, фиолетовый и розовый. По материалам предусмотрены ЛДСП, Egger, МДФ, эмаль и натуральный шпон.</p></div></article>
-          <article class="faq-item"><button type="button" aria-expanded="false"><span>Как оформить заказ?</span><span>+</span></button><div class="faq-answer"><p>Достаточно написать в удобный мессенджер или позвонить. Здесь позднее будут размещены реальные контакты, график и ссылка на консультацию.</p></div></article>
+          <article class="faq-item"><button type="button" aria-expanded="false"><span>Как оформить заказ?</span><span>+</span></button><div class="faq-answer"><p>Достаточно написать в удобный мессенджер или позвонить. Нажмите «Связаться» и выберите удобный способ: телефон, Telegram, Instagram или MAX.</p></div></article>
         </div>
       </div>
     </section>
 
     <section class="contact-section" id="contacts">
       <div class="container"><div class="contact-card">
-        <div><span class="eyebrow">buyantuev мебель · с 2005 года</span><h2>Давайте создадим шкаф для вашего дома</h2><p>Вставьте здесь реальные номер телефона, Telegram, WhatsApp или форму связи. Регистрация пользователю не потребуется.</p></div>
-        <!-- TODO: замените ссылки-заглушки на реальные способы связи. -->
-        <div class="contact-actions"><a class="button-primary" href="tel:+70000000000">Позвонить мастеру</a><a class="button-ghost" href="https://t.me/username" target="_blank" rel="noopener">Написать в Telegram</a></div>
+        <div><span class="eyebrow">buyantuev мебель · с 2005 года</span><h2>Давайте создадим шкаф для вашего дома</h2><p>Позвоните или напишите в удобный мессенджер — обсудим размеры, материалы и сроки. Регистрация не нужна.</p></div>
+        <div class="contact-actions"><button type="button" class="button-primary" data-contact-open>Связаться с мастером</button></div>
       </div></div>
     </section>
   </main>
 
-  <footer><div class="container footer-inner"><a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"></span>buyantuev <small>мебель</small></a><span>© <span id="currentYear"></span> · В деле с 2005 года</span><div class="footer-links"><a href="#configurator">Конфигуратор</a><a href="#contacts">Контакты</a></div></div></footer>
+  <footer><div class="container footer-inner"><a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"></span>buyantuev <small>мебель</small></a><span>© <span id="currentYear"></span> · В деле с 2005 года</span><div class="footer-links"><a href="#configurator">Конфигуратор</a><a href="#contacts" data-contact-open>Контакты</a></div></div></footer>
+
+  <dialog class="contact-modal" id="contactModal" aria-labelledby="contactModalTitle">
+    <div class="cm-sheet">
+      <span class="cm-grab" aria-hidden="true"></span>
+      <button type="button" class="cm-close" id="contactClose" aria-label="Закрыть окно">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <span class="eyebrow">buyantuev мебель</span>
+      <h2 id="contactModalTitle">Связаться с мастером</h2>
+      <p class="cm-lead">Выберите удобный способ: позвоните или напишите в мессенджер — обсудим размеры, материалы и сроки.</p>
+      <div class="cm-list" id="contactList"></div>
+    </div>
+  </dialog>
 
   <script>
     /* Все данные каталога находятся здесь — сайт работает без БД и внешних интеграций. */
@@ -1072,5 +1131,64 @@
 
   </script>
 <script type="module" src="three-editor.js"></script>
-  </body>
+  
+  <script>
+    /* ====== Контакты. Заполните значения — и ссылки в окне заработают сами. ====== */
+    const CONTACTS = {
+      phone: "",      // например: "+7 999 123-45-67"
+      telegram: "",   // "username" или "https://t.me/username"
+      instagram: "",  // "username" или "https://instagram.com/username"
+      max: ""         // ссылка на ваш профиль или канал в MAX
+    };
+
+    (function () {
+      const dialog = document.getElementById("contactModal");
+      const list = document.getElementById("contactList");
+      if (!dialog || !list) return;
+      const url = (value, base) => /^https?:\/\//i.test(value) ? value : base + value.replace(/^@/, "").replace(/^\//, "");
+      const ICONS = {
+        phone: '<path d="M6.6 3h3l1.4 4-2 1.3a11 11 0 0 0 5.7 5.7l1.3-2 4 1.4v3A2.6 2.6 0 0 1 17.4 19C9.5 18.5 5.5 14.5 5 6.6A2.6 2.6 0 0 1 6.6 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>',
+        telegram: '<path d="M21 4 3.5 11l5.2 1.9L10 19l3-3.6 4.3 3.2L21 4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m8.7 12.9 8-5.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
+        instagram: '<rect x="3.5" y="3.5" width="17" height="17" rx="5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/><circle cx="17" cy="7" r="1.1" fill="currentColor"/>',
+        max: '<path d="M4 12a8 8 0 1 1 3.3 6.5L4 19.5l1.2-3.6A8 8 0 0 1 4 12Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m8.5 14.5 1.6-5 1.9 3 1.9-3 1.6 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>'
+      };
+      const rows = [
+        { kind: "phone", label: "Позвонить", value: CONTACTS.phone, shown: CONTACTS.phone, href: CONTACTS.phone && "tel:" + CONTACTS.phone.replace(/[^\d+]/g, "") },
+        { kind: "telegram", label: "Telegram", value: CONTACTS.telegram, shown: CONTACTS.telegram && (/^https?:/i.test(CONTACTS.telegram) ? "Написать в Telegram" : "@" + CONTACTS.telegram.replace(/^@/, "")), href: CONTACTS.telegram && url(CONTACTS.telegram, "https://t.me/") },
+        { kind: "instagram", label: "Instagram", value: CONTACTS.instagram, shown: CONTACTS.instagram && (/^https?:/i.test(CONTACTS.instagram) ? "Открыть Instagram" : "@" + CONTACTS.instagram.replace(/^@/, "")), href: CONTACTS.instagram && url(CONTACTS.instagram, "https://www.instagram.com/") },
+        { kind: "max", label: "MAX", value: CONTACTS.max, shown: CONTACTS.max && (/^https?:/i.test(CONTACTS.max) ? "Написать в MAX" : CONTACTS.max), href: CONTACTS.max && url(CONTACTS.max, "https://max.ru/") }
+      ];
+      rows.forEach(row => {
+        const ready = Boolean(row.value);
+        const el = document.createElement(ready ? "a" : "div");
+        el.className = "cm-row" + (ready ? "" : " is-empty");
+        el.dataset.kind = row.kind;
+        if (ready) { el.href = row.href; if (row.kind !== "phone") { el.target = "_blank"; el.rel = "noopener noreferrer"; } }
+        el.innerHTML = '<span class="cm-ico"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true">' + ICONS[row.kind] + '</svg></span><span class="cm-text"><span class="cm-label"></span><span class="cm-value"></span></span><span class="cm-arrow" aria-hidden="true">' + (ready ? "→" : "") + '</span>';
+        el.querySelector(".cm-label").textContent = row.label;
+        el.querySelector(".cm-value").textContent = ready ? row.shown : "Скоро добавим";
+        list.appendChild(el);
+      });
+
+      let lastFocus = null;
+      function openModal(event) {
+        if (event) event.preventDefault();
+        lastFocus = document.activeElement;
+        if (typeof dialog.showModal === "function") dialog.showModal(); else dialog.setAttribute("open", "");
+        document.documentElement.style.overflow = "hidden";
+      }
+      function closeModal() {
+        if (typeof dialog.close === "function") dialog.close(); else dialog.removeAttribute("open");
+        document.documentElement.style.overflow = "";
+        if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+      }
+      document.querySelectorAll("[data-contact-open]").forEach(el => el.addEventListener("click", openModal));
+      document.getElementById("contactClose").addEventListener("click", closeModal);
+      dialog.addEventListener("click", event => { if (event.target === dialog) closeModal(); });   /* клик по затемнению */
+      dialog.addEventListener("cancel", () => { document.documentElement.style.overflow = ""; });  /* клавиша Esc */
+      dialog.addEventListener("close", () => { document.documentElement.style.overflow = ""; });
+      list.addEventListener("click", event => { if (event.target.closest("a.cm-row")) setTimeout(closeModal, 150); });
+    })();
+  </script>
+</body>
 </html>
