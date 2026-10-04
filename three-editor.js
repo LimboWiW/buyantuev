@@ -190,9 +190,8 @@ function surfaceMaterial(kind, color, roughness, areaW, areaH, tileMeters) {
 /* ---------- Комната ---------- */
 function buildRoom(state, dims) {
   clearGroup(roomGroup);
-  const w = Math.max(3.8, dims.W + 1.6);
-  const d = 3.6;
-  const h = Math.max(2.7, dims.H + 0.3);
+  const room = state.product === 'kitchen' ? kitchenRoom(getKitchen(state)) : { w: Math.max(3.8, dims.W + 1.6), d: 3.6, h: Math.max(2.7, dims.H + 0.3) };
+  const { w, d, h } = room;
   roomSize = { w, d, h };
 
   const wallHex = cssColor('--wall-color', '#e6ded3');
@@ -303,12 +302,223 @@ function buildModel(state, dims) {
   cabinetGroup.position.set(0, 0, -roomSize.d / 2 + D / 2 + 0.006);
 }
 
+/* ---------- Кухня ---------- */
+const COUNTER_HEX = { laminate: 0xb78f64, white: 0xebe7de, graphite: 0x3d4140, marble: 0xd9d6cf };
+const PLINTH = 0.1, BASE_H = 0.72, TOP_T = 0.04, TOP_Y = PLINTH + BASE_H + TOP_T, UPPER_BOTTOM = 1.45, UPPER_D = 0.32;
+const FULL_TYPES = new Set(['tall', 'fridge']);
+let kitchenRects = [];
+
+function getKitchen(state) {
+  const k = state.kitchen || {};
+  const modules = (Array.isArray(k.modules) && k.modules.length ? k.modules : [{ width: 600, type: 'base' }])
+    .map(m => ({ type: m.type || 'base', w: Math.max(0.3, Number(m.width || 600) / 1000) }));
+  const dims = k.dimensions || {};
+  return {
+    layout: ['straight', 'l', 'u'].includes(k.layout) ? k.layout : 'straight',
+    side: Math.max(1.2, Number(k.side || 2000) / 1000),
+    uppers: k.uppers !== false,
+    counter: k.counter in COUNTER_HEX ? k.counter : 'laminate',
+    modules,
+    W: modules.reduce((s, m) => s + m.w, 0),
+    H: Math.max(2.0, Number(dims.height || 2300) / 1000),
+    D: Math.max(0.5, Number(dims.depth || 600) / 1000),
+    handle: state.hardware?.handles || 'basic'
+  };
+}
+function kitchenRoom(K) {
+  const w = K.layout === 'u' ? Math.max(K.W, 2.4) : K.layout === 'l' ? Math.max(3.4, K.W + 0.9) : Math.max(3.8, K.W + 1.6);
+  const d = K.layout === 'straight' ? 3.6 : Math.max(3.4, K.side + 1.5);
+  return { w, d, h: Math.max(2.7, K.H + 0.35) };
+}
+function fillRun(len) {
+  if (len < 0.3) return [];
+  const n = Math.floor(len / 0.6);
+  if (n === 0) return [{ w: len }];
+  const rest = len - n * 0.6;
+  const parts = Array.from({ length: n }, () => ({ w: 0.6 }));
+  if (rest >= 0.3) parts.push({ w: rest }); else parts[n - 1].w += rest;
+  return parts;
+}
+
+function buildKitchen(state) {
+  clearGroup(cabinetGroup);
+  cabinetGroup.position.set(0, 0, 0);
+  const K = getKitchen(state);
+  const { w: RW, d: RD } = roomSize;
+  const D = K.D;
+  const brass = K.handle === 'brass';
+  const counterColor = new THREE.Color(COUNTER_HEX[K.counter]);
+  const M = {
+    face: mat(cssColor('--furniture-color', '#b48a64'), 0.38),
+    carcass: mat(new THREE.Color(cssColor('--furniture-color', '#b48a64')).lerp(new THREE.Color(cssColor('--furniture-dark', '#805a3e')), 0.3), 0.6), /* торцы шкафов видны — красим в тон фасадов */
+    plinth: mat('#25282a', 0.8),
+    top: mat(counterColor, 0.3),
+    apron: mat(counterColor.clone().lerp(new THREE.Color('#ffffff'), 0.4), 0.5),
+    steel: mat('#b8bfc3', 0.32, 0.65),
+    black: mat('#14181a', 0.22, 0.15),
+    handle: mat(brass ? '#b6894d' : '#2d3733', 0.3, brass ? 0.65 : 0.1),
+    groove: mat('#1b1f1e', 0.6)
+  };
+  const put = (g, w, h, d, material, x, y, z) => box(w, h, d, material, x, y, z, g);
+  const cyl = (g, r, h, material, x, y, z, rotX = 0) => {
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, 14), material);
+    m.position.set(x, y, z); m.rotation.x = rotX; m.castShadow = true;
+    g.add(m);
+  };
+  const grip = (g, o) => {
+    if (K.handle === 'profile') put(g, o.w * 0.94, 0.012, 0.006, M.groove, o.cx, o.yEdge, o.z + 0.002);
+    else if (o.horizontal) put(g, Math.min(0.3, o.w * 0.6), 0.012, 0.016, M.handle, o.hx, o.y, o.z + 0.008);
+    else put(g, 0.012, 0.16, 0.016, M.handle, o.hx, o.y, o.z + 0.008);
+  };
+  /* Дверцы: одна, если модуль узкий, иначе две */
+  const doorSet = (g, cx, w, ya, yb, hy, ye, zf) => {
+    const n = w > 0.5 ? 2 : 1, dw = w / n;
+    for (let i = 0; i < n; i++) {
+      const dx = cx - w / 2 + dw * (i + 0.5);
+      put(g, dw - 0.006, yb - ya - 0.006, 0.018, M.face, dx, (ya + yb) / 2, zf - 0.009);
+      const side = n === 1 || i === 0 ? 1 : -1;
+      grip(g, { cx: dx, hx: dx + side * (dw / 2 - 0.035), y: hy, yEdge: ye, w: dw, z: zf });
+    }
+  };
+  const drawerFronts = (g, cx, w, y0, h, shares) => {
+    const total = shares.reduce((s, v) => s + v, 0);
+    let y = y0;
+    shares.forEach(share => {
+      const fh = h * share / total;
+      put(g, w - 0.006, fh - 0.004, 0.018, M.face, cx, y + fh / 2, D - 0.009);
+      grip(g, { cx, hx: cx, y: y + fh - 0.05, yEdge: y + fh - 0.014, w, z: D, horizontal: true });
+      y += fh;
+    });
+  };
+
+  const lowerModule = (g, m, x0) => {
+    const w = m.w, cx = x0 + w / 2;
+    if (m.type === 'tall') {
+      put(g, w - 0.004, K.H, D - 0.02, M.carcass, cx, K.H / 2, (D - 0.02) / 2);
+      const split = Math.min(1.5, K.H * 0.62);
+      doorSet(g, cx, w, 0.003, split, split - 0.12, split - 0.018, D);
+      doorSet(g, cx, w, split + 0.003, K.H - 0.003, split + 0.12, split + 0.02, D);
+      return;
+    }
+    if (m.type === 'fridge') {
+      const hF = Math.min(1.85, K.H - 0.05);
+      put(g, w - 0.004, hF, D, M.steel, cx, hF / 2, D / 2);
+      put(g, w - 0.004, 0.004, 0.006, M.black, cx, 0.62, D + 0.001);
+      put(g, 0.014, 0.4, 0.024, M.black, cx + w / 2 - 0.05, 0.9, D + 0.012);
+      put(g, 0.014, 0.25, 0.024, M.black, cx + w / 2 - 0.05, 0.45, D + 0.012);
+      if (K.uppers && K.H - hF > 0.12) {
+        put(g, w - 0.004, K.H - hF - 0.004, D - 0.02, M.carcass, cx, hF + 0.002 + (K.H - hF) / 2, (D - 0.02) / 2);
+        doorSet(g, cx, w, hF + 0.005, K.H - 0.003, hF + 0.1, hF + 0.02, D);
+      }
+      return;
+    }
+    put(g, w - 0.004, BASE_H, D - 0.02, M.carcass, cx, PLINTH + BASE_H / 2, (D - 0.02) / 2);
+    put(g, w, TOP_T, D + 0.025, M.top, cx, PLINTH + BASE_H + TOP_T / 2, (D + 0.025) / 2);
+    put(g, w, UPPER_BOTTOM - TOP_Y, 0.012, M.apron, cx, (UPPER_BOTTOM + TOP_Y) / 2, 0.006);
+    const y0 = PLINTH + 0.003, h = BASE_H - 0.006;
+    if (m.type === 'drawers') {
+      drawerFronts(g, cx, w, y0, h, [1, 1.5, 1.7]);
+    } else if (m.type === 'hob') {
+      drawerFronts(g, cx, w, y0, h, [1, 2.4]);
+      const pw = Math.min(w - 0.04, 0.58);
+      put(g, pw, 0.008, 0.5, M.black, cx, TOP_Y + 0.004, D * 0.5);
+      const dx = pw * 0.22, dz = 0.11;
+      const spots = w >= 0.5 ? [[-dx, -dz], [dx, -dz], [-dx, dz], [dx, dz]] : [[0, -dz], [0, dz]];
+      spots.forEach(([ox, oz]) => cyl(g, 0.062, 0.004, M.steel, cx + ox, TOP_Y + 0.0095, D * 0.5 + oz));
+    } else if (m.type === 'oven') {
+      const ovenH = 0.36, yTop = y0 + h - ovenH - 0.01;
+      put(g, w - 0.006, ovenH, 0.018, M.black, cx, y0 + h - ovenH / 2, D - 0.009);
+      put(g, w * 0.7, 0.014, 0.02, M.steel, cx, y0 + h - 0.05, D + 0.008);
+      put(g, w - 0.006, yTop - y0 - 0.004, 0.018, M.face, cx, y0 + (yTop - y0) / 2, D - 0.009);
+      grip(g, { cx, hx: cx, y: yTop - 0.05, yEdge: yTop - 0.014, w, z: D, horizontal: true });
+    } else {
+      doorSet(g, cx, w, y0, y0 + h, y0 + h - 0.12, y0 + h - 0.018, D);
+      if (m.type === 'sink') {
+        const sw = Math.min(w - 0.1, 0.7);
+        put(g, sw, 0.01, 0.42, M.steel, cx, TOP_Y + 0.005, D * 0.5);
+        put(g, sw - 0.06, 0.002, 0.33, M.black, cx, TOP_Y + 0.011, D * 0.5);
+        cyl(g, 0.013, 0.27, M.steel, cx, TOP_Y + 0.135, 0.1);
+        cyl(g, 0.011, 0.16, M.steel, cx, TOP_Y + 0.27, 0.18, Math.PI / 2);
+      }
+    }
+  };
+  const upperModule = (g, u) => {
+    const cx = u.x + u.w / 2;
+    if (u.hood) {
+      put(g, Math.max(0.4, u.w - 0.1), 0.12, 0.48, M.steel, cx, UPPER_BOTTOM + 0.06, 0.24);
+      const ch = K.H - (UPPER_BOTTOM + 0.12);
+      if (ch > 0.05) put(g, 0.22, ch, 0.22, M.steel, cx, UPPER_BOTTOM + 0.12 + ch / 2, 0.11);
+      return;
+    }
+    const UH = Math.max(0.4, K.H - UPPER_BOTTOM);
+    put(g, u.w - 0.004, UH, UPPER_D - 0.02, M.carcass, cx, UPPER_BOTTOM + UH / 2, (UPPER_D - 0.02) / 2);
+    doorSet(g, cx, u.w, UPPER_BOTTOM + 0.003, K.H - 0.003, UPPER_BOTTOM + 0.12, UPPER_BOTTOM + 0.018, UPPER_D);
+  };
+  const makeRun = (lower, uppers, len) => {
+    const g = new THREE.Group();
+    let x = 0;
+    lower.forEach(m => { lowerModule(g, m, x); x += m.w; });
+    put(g, len, PLINTH, D - 0.05, M.plinth, len / 2, PLINTH / 2, (D - 0.05) / 2);
+    if (K.uppers) uppers.forEach(u => upperModule(g, u));
+    return g;
+  };
+
+  /* Основная линия вдоль задней стены */
+  const x0 = K.layout === 'straight' ? -K.W / 2 : -RW / 2;
+  let cursor = 0;
+  const upBack = [];
+  kitchenRects = [];
+  K.modules.forEach(m => {
+    const full = FULL_TYPES.has(m.type);
+    if (!full) upBack.push({ x: cursor, w: m.w, hood: m.type === 'hob' });
+    kitchenRects.push({ x: x0 + cursor + m.w / 2, z: -RD / 2 + D / 2, w: m.w, d: D, h: full || K.uppers ? K.H : TOP_Y });
+    cursor += m.w;
+  });
+  const back = makeRun(K.modules, upBack, K.W);
+  back.position.set(x0, 0, -RD / 2);
+  cabinetGroup.add(back);
+
+  /* Боковые линии: Г- и П-образная планировки заполняются типовыми модулями */
+  if (K.layout !== 'straight') {
+    const sideLen = K.side - D;
+    const lowerSide = fillRun(sideLen).map((p, i) => ({ w: p.w, type: i % 2 === 1 ? 'drawers' : 'base' }));
+    const UL = K.side - UPPER_D;
+    const upperSide = offset => { let x = offset; return fillRun(UL).map(p => { const u = { x, w: p.w }; x += p.w; return u; }); };
+    const left = makeRun(lowerSide, upperSide(0), sideLen);
+    left.rotation.y = Math.PI / 2;
+    left.position.set(-RW / 2, 0, -RD / 2 + K.side);
+    cabinetGroup.add(left);
+    if (K.layout === 'u') {
+      const right = makeRun(lowerSide, upperSide(-(D - UPPER_D)), sideLen);
+      right.rotation.y = -Math.PI / 2;
+      right.position.set(RW / 2, 0, -RD / 2 + D);
+      cabinetGroup.add(right);
+    }
+  }
+}
+
+/* Подсветка выбранного модуля (только в режимах «Композиция» и «Детали») */
+const highlight = new THREE.Group();
+highlight.add(
+  new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial({ color: 0xffd24a, transparent: true, opacity: 0.2, depthWrite: false })),
+  new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(1, 1, 1)), new THREE.LineBasicMaterial({ color: 0xffd24a }))
+);
+highlight.visible = false;
+scene.add(highlight);
+function updateHighlight(state) {
+  const show = state.product === 'kitchen' && state.editorMode !== '3d' && kitchenRects.length;
+  const r = show ? kitchenRects[Math.min(Number(state.kitchen?.selected) || 0, kitchenRects.length - 1)] : null;
+  highlight.visible = !!r;
+  if (r) { highlight.scale.set(r.w, r.h, r.d); highlight.position.set(r.x, r.h / 2, r.z); }
+}
+
 /* ---------- Камера ---------- */
 function fit() {
   const vFov = THREE.MathUtils.degToRad(camera.fov);
   const hFov = 2 * Math.atan(Math.tan(vFov / 2) * camera.aspect);
   const needV = ((roomSize.h + 0.7) * 1.3) / (2 * Math.tan(vFov / 2));
-  const needH = ((roomSize.w + 0.6) * 1.32) / (2 * Math.tan(hFov / 2));
+  const span = Math.max(roomSize.w, roomSize.d * 1.1) + 0.6;
+  const needH = (span * 1.32) / (2 * Math.tan(hFov / 2));
   fitDistance = Math.max(4, needV, needH);
 }
 function syncCamera() {
@@ -344,17 +554,19 @@ function requestRender() { if (!raf) raf = requestAnimationFrame(frame); }
 function frame() {
   raf = 0;
   const state = getState();
-  const sig = JSON.stringify([state.dimensions, state.sections, state.hardware, state.furnitureColor, state.wallColor, state.wallType, state.floorColor, state.floorType]);
+  const kit = state.kitchen ? { ...state.kitchen, selected: 0 } : null;
+  const sig = JSON.stringify([state.product, kit, state.dimensions, state.sections, state.hardware, state.furnitureColor, state.wallColor, state.wallType, state.floorColor, state.floorType]);
   if (sig !== builtSig) {
     builtSig = sig;
     const dims = getDims(state);
     buildRoom(state, dims);
-    buildModel(state, dims);
+    if (state.product === 'kitchen') buildKitchen(state); else { kitchenRects = []; buildModel(state, dims); }
     fit();
     renderer.shadowMap.needsUpdate = true;
   }
   const lsig = state.lightType + ':' + state.lightStrength;
   if (lsig !== lightSig) { lightSig = lsig; updateLights(state); }
+  updateHighlight(state);
   syncCamera();
   renderer.render(scene, camera);
 }

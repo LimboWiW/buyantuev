@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="buyantuev мебель — шкафы на заказ в Улан-Удэ. В деле с 2005 года." />
+  <meta name="description" content="buyantuev мебель — шкафы и кухни на заказ в Улан-Удэ. В деле с 2005 года." />
   <title>buyantuev мебель — шкафы на заказ</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -671,6 +671,11 @@
       .cm-sheet h2 { font-size: 23px; }
       .cm-close { top: 18px; right: 14px; }
     }
+
+    /* ===== Кухня ===== */
+    [hidden] { display: none !important; }
+    .product-tabs { grid-template-columns: repeat(2, 1fr); }
+    .editor-select, .editor-number { min-width: 0; }
   </style>
 </head>
 <body>
@@ -693,7 +698,7 @@
         <div class="hero-copy">
           <span class="eyebrow">Мебель в деле с 2005 года</span>
           <h1>Шкафы, которые <em>работают на дом</em></h1>
-          <p class="lead">Изготавливаем корпусные шкафы по вашим размерам. Настройте конфигурацию, цвет, материал и освещение — получите ориентир по цене для Улан‑Удэ.</p>
+          <p class="lead">Изготавливаем корпусные шкафы и кухни по вашим размерам. Настройте конфигурацию, цвет, материал и освещение — получите ориентир по цене для Улан‑Удэ.</p>
           <div class="hero-actions">
             <a class="button-primary" href="#configurator">Собрать свой вариант <span class="arrow">→</span></a>
             <a class="button-ghost" href="#process">Как это устроено</a>
@@ -724,7 +729,7 @@
       <div class="container">
         <div class="configurator-intro">
           <span class="eyebrow">Интерактивный расчёт</span>
-          <h2>Спроектируйте шкаф<br>под ваш интерьер</h2>
+          <h2>Шкаф или кухня<br>под ваш интерьер</h2>
           <p class="lead">Соберите конструкцию из секций, настройте наполнение и фасады, а затем оцените размеры, материалы и ориентировочную стоимость проекта.</p>
         </div>
         <div class="configurator-shell">
@@ -747,6 +752,7 @@
               <span class="control-label">Что подбираем</span>
               <div class="product-tabs" id="productTabs">
                 <button class="product-tab active" type="button" data-product="wardrobe"><span>ПРОЕКТ</span>Шкаф распашной</button>
+                <button class="product-tab" type="button" data-product="kitchen"><span>ПРОЕКТ</span>Кухня</button>
               </div>
             </div>
             <div class="control-group">
@@ -757,8 +763,13 @@
                 <label><span>Глубина</span><button type="button" class="stepper" data-dim="depth" data-step="-50">−</button><input id="depthInput" type="number" min="300" max="800" step="50" value="600"><button type="button" class="stepper" data-dim="depth" data-step="50">+</button></label>
               </div>
             </div>
+            <div class="control-group" id="kitchenLayout" hidden>
+              <span class="control-label">Планировка кухни</span>
+              <div class="editor-modes" id="kitchenLayoutChips"><button class="type-chip" type="button" data-layout="straight">Прямая</button><button class="type-chip" type="button" data-layout="l">Угловая</button><button class="type-chip" type="button" data-layout="u">П-образная</button></div>
+              <div class="section-settings" id="kitchenSettings"></div>
+            </div>
             <div class="control-group editor-tools">
-              <span class="control-label">Редактор шкафа</span>
+              <span class="control-label" id="editorTitle">Редактор шкафа</span>
               <div class="editor-modes" id="editorModes"><button class="type-chip active" type="button" data-mode="3d">3D</button><button class="type-chip" type="button" data-mode="compose">Композиция</button><button class="type-chip" type="button" data-mode="details">Детали</button></div>
               <div class="section-toolbar"><button class="button-ghost compact-button" id="addSection" type="button">+ Секция</button><button class="button-ghost compact-button" id="duplicateSection" type="button">Дублировать</button><button class="button-ghost compact-button" id="removeSection" type="button">Удалить</button></div>
               <div class="section-list" id="sectionList" aria-label="Секции шкафа"></div>
@@ -828,7 +839,7 @@
               <span class="estimate-details" id="priceDetails">Шкаф · 1200 × 600 × 2400 мм · ЛДСП</span>
               <a href="#contacts" class="button-primary" data-contact-open>Запросить точный расчёт</a>
             </div>
-            <p class="price-disclaimer">Ориентир для Улан‑Удэ на 2026 год с поправкой +10–15% на декор. Точная смета зависит от фурнитуры, наполнения, доставки и монтажа.</p>
+            <p class="price-disclaimer" id="priceDisclaimer">Ориентир для Улан‑Удэ на 2026 год с поправкой +10–15% на декор. Точная смета зависит от фурнитуры, наполнения, доставки и монтажа.</p>
           </aside>
         </div>
       </div>
@@ -898,7 +909,8 @@
   <script>
     /* Все данные каталога находятся здесь — сайт работает без БД и внешних интеграций. */
     const catalog = {
-      wardrobe: { name: "Шкаф распашной · пример", className: "furniture--wardrobe", rate: 23990 * 1.12, defaultDimensions: { width: 1200, height: 2400, depth: 600 } }
+      wardrobe: { name: "Шкаф распашной · пример", className: "furniture--wardrobe", rate: 23990 * 1.12, defaultDimensions: { width: 1200, height: 2400, depth: 600 } },
+      kitchen: { name: "Кухня · пример", defaultDimensions: { width: 3200, height: 2300, depth: 600 } }
     };
     /* Базовый ориентир рынка Улан‑Удэ: шкафы от 23 990 ₽/п.м.; заложена поправка 12% на 2026 год. */
     const furnitureColors = [
@@ -987,11 +999,102 @@
     const dimensionInputs = { width: document.getElementById("widthInput"), height: document.getElementById("heightInput"), depth: document.getElementById("depthInput") };
 
     function rubles(amount) { return new Intl.NumberFormat("ru-RU").format(amount) + " ₽"; }
-    function renderEditorControls() {
+    function renderWardrobeControls() {
       const list = document.getElementById("sectionList");
       list.innerHTML = state.sections.map((section, index) => '<button type="button" class="section-tab ' + (index === state.selectedSection ? "active" : "") + '" data-section-index="' + index + '">Секция ' + (index + 1) + '</button>').join("");
       const section = state.sections[state.selectedSection];
       document.getElementById("sectionSettings").innerHTML = '<label class="editor-field">Ширина, мм<input class="editor-number" id="sectionWidth" type="number" min="250" max="2000" step="50" value="' + section.width + '"></label><label class="editor-field">Полки<input class="editor-number" id="sectionShelves" type="number" min="0" max="8" step="1" value="' + section.shelves + '"></label><label class="editor-field">Фасад<select class="editor-select" id="sectionFacade"><option value="door" ' + (section.facade === "door" ? "selected" : "") + '>Дверь</option><option value="open" ' + (section.facade === "open" ? "selected" : "") + '>Открытая</option><option value="glass" ' + (section.facade === "glass" ? "selected" : "") + '>Стекло</option></select></label>';
+      document.querySelectorAll("[data-mode]").forEach(button => button.classList.toggle("active", button.dataset.mode === state.editorMode));
+    }
+    /* ====== Кухня ======
+       ВАЖНО: цены ниже — ориентировочные заготовки. Подставьте свои расценки за погонный метр. */
+    const KITCHEN_RATES = { lower: 21000, upper: 11500, minTotal: 69900, hardwareFactor: 2 };
+    const kitchenTypes = {
+      base: { name: "Шкаф с дверцами", k: 1 },
+      drawers: { name: "Ящики", k: 1.25 },
+      sink: { name: "Мойка", k: 1.1 },
+      hob: { name: "Варочная панель", k: 1.05 },
+      oven: { name: "Духовой шкаф", k: 1.35 },
+      tall: { name: "Пенал", k: 1.9 },
+      fridge: { name: "Холодильник (ниша)", k: 0.6 }
+    };
+    const kitchenCounters = {
+      laminate: { name: "Пластик под дерево", price: 4800 },
+      white: { name: "Камень белый", price: 12500 },
+      graphite: { name: "Графит", price: 9800 },
+      marble: { name: "Мрамор", price: 16500 }
+    };
+    const kitchenLayouts = { straight: "Прямая", l: "Угловая", u: "П-образная" };
+    const kitchenFull = new Set(["tall", "fridge"]);
+    function freshKitchen() {
+      return {
+        layout: "l", side: 2000, uppers: true, counter: "laminate", selected: 0, nextId: 6,
+        dimensions: { width: 3200, height: 2300, depth: 600 },
+        modules: [
+          { id: 1, width: 600, type: "base" }, { id: 2, width: 800, type: "sink" }, { id: 3, width: 600, type: "drawers" },
+          { id: 4, width: 600, type: "hob" }, { id: 5, width: 600, type: "fridge" }
+        ]
+      };
+    }
+    function normalizeKitchen(saved) {
+      const base = freshKitchen(), k = { ...base, ...(saved || {}) };
+      k.dimensions = { ...base.dimensions, ...((saved && saved.dimensions) || {}) };
+      k.modules = saved && Array.isArray(saved.modules) && saved.modules.length ? saved.modules : base.modules;
+      if (!kitchenLayouts[k.layout]) k.layout = "l";
+      if (!kitchenCounters[k.counter]) k.counter = "laminate";
+      k.selected = Math.min(Math.max(0, Number(k.selected) || 0), k.modules.length - 1);
+      return k;
+    }
+    state.kitchen = normalizeKitchen(state.kitchen);
+    if (!catalog[state.product]) state.product = "wardrobe";
+    function syncKitchenWidth() { state.kitchen.dimensions.width = state.kitchen.modules.reduce((sum, m) => sum + Number(m.width), 0); }
+    syncKitchenWidth();
+    function curDims() { return state.product === "kitchen" ? state.kitchen.dimensions : state.dimensions; }
+    function dimLimits(key) {
+      if (state.product === "kitchen") return { width: [state.kitchen.layout === "u" ? 2400 : 1200, 6000], height: [2000, 2700], depth: [500, 700] }[key];
+      return { width: [600, 4000], height: [700, 3000], depth: [300, 800] }[key];
+    }
+    function kitchenInfo(furnitureColor, material) {
+      const k = state.kitchen, d = k.dimensions, D = d.depth;
+      const sideCount = k.layout === "straight" ? 0 : k.layout === "u" ? 2 : 1;
+      const backLen = k.modules.reduce((s, m) => s + m.width, 0) / 1000;
+      const sideLen = Math.max(0, k.side - D) / 1000 * sideCount;
+      const open = k.modules.filter(m => !kitchenFull.has(m.type)).reduce((s, m) => s + m.width, 0) / 1000;
+      const weighted = k.modules.reduce((s, m) => s + m.width / 1000 * (kitchenTypes[m.type] || kitchenTypes.base).k, 0) + sideLen * 1.05;
+      const upperLen = k.uppers ? open + Math.max(0, k.side - 320) / 1000 * sideCount : 0;
+      const colorMultiplier = 1 + (furnitureColor.extra || 0);
+      const heightFactor = Math.max(0.5, (d.height - 1450) / 850);
+      const body = (weighted * KITCHEN_RATES.lower * (0.85 + 0.15 * D / 600) + upperLen * KITCHEN_RATES.upper * heightFactor) * material.multiplier * colorMultiplier;
+      const counter = (open + sideLen) * kitchenCounters[k.counter].price;
+      const hw = (hardware.handles[state.hardware.handles].price + hardware.hinges[state.hardware.hinges].price) * KITCHEN_RATES.hardwareFactor;
+      const total = Math.max(KITCHEN_RATES.minTotal, Math.round((body + counter + hw) / 100) * 100);
+      const lengthText = k.layout === "straight" ? backLen.toFixed(1) + " м" : backLen.toFixed(1) + " + " + (k.side / 1000).toFixed(1) + (k.layout === "u" ? " × 2" : "") + " м";
+      return {
+        total,
+        details: "Кухня · " + kitchenLayouts[k.layout] + " · " + lengthText + " · " + k.modules.length + " мод. · " + material.name + " · столешница: " + kitchenCounters[k.counter].name.toLowerCase() + " · " + hardware.handles[state.hardware.handles].name,
+        caption: "Кухня · " + kitchenLayouts[k.layout].toLowerCase() + " планировка · фасады из " + material.name + " в оттенке «" + furnitureColor.label + "»"
+      };
+    }
+    function kitchenOp(op) {
+      const k = state.kitchen;
+      if (op === "add" && k.modules.length < 10) { k.modules.push({ id: k.nextId++, width: 600, type: "base" }); k.selected = k.modules.length - 1; }
+      if (op === "dup" && k.modules.length < 10) { k.modules.splice(k.selected + 1, 0, { ...k.modules[k.selected], id: k.nextId++ }); k.selected += 1; }
+      if (op === "del" && k.modules.length > 1) { k.modules.splice(k.selected, 1); k.selected = Math.max(0, k.selected - 1); }
+      syncKitchenWidth(); render();
+    }
+    function kitchenSettingsChange(event) {
+      const k = state.kitchen, m = k.modules[k.selected]; if (!m) return;
+      if (event.target.id === "sectionWidth") m.width = Math.max(300, Math.min(1200, Math.round(Number(event.target.value) / 50) * 50));
+      if (event.target.id === "kitchenType") m.type = kitchenTypes[event.target.value] ? event.target.value : "base";
+      syncKitchenWidth(); render();
+    }
+    function renderEditorControls() {
+      if (state.product !== "kitchen") { renderWardrobeControls(); return; }
+      const k = state.kitchen, m = k.modules[k.selected] || k.modules[0];
+      document.getElementById("sectionList").innerHTML = k.modules.map((item, index) => '<button type="button" class="section-tab ' + (index === k.selected ? "active" : "") + '" data-section-index="' + index + '">Модуль ' + (index + 1) + '</button>').join("");
+      document.getElementById("sectionSettings").innerHTML = '<label class="editor-field">Ширина, мм<input class="editor-number" id="sectionWidth" type="number" min="300" max="1200" step="50" value="' + m.width + '"></label><label class="editor-field">Тип модуля<select class="editor-select" id="kitchenType">' + Object.entries(kitchenTypes).map(([id, t]) => '<option value="' + id + '"' + (id === m.type ? " selected" : "") + '>' + t.name + '</option>').join("") + '</select></label>';
+      document.getElementById("kitchenSettings").innerHTML = (k.layout !== "straight" ? '<label class="editor-field">Боковая сторона, мм<input class="editor-number" id="kitchenSide" type="number" min="1200" max="3600" step="100" value="' + k.side + '"></label>' : "") + '<label class="editor-field">Столешница<select class="editor-select" id="kitchenCounter">' + Object.entries(kitchenCounters).map(([id, c]) => '<option value="' + id + '"' + (id === k.counter ? " selected" : "") + '>' + c.name + '</option>').join("") + '</select></label><label class="editor-field">Верхние шкафы<select class="editor-select" id="kitchenUppers"><option value="1"' + (k.uppers ? " selected" : "") + '>Есть</option><option value="0"' + (k.uppers ? "" : " selected") + '>Нет</option></select></label>';
+      document.querySelectorAll("[data-layout]").forEach(button => button.classList.toggle("active", button.dataset.layout === k.layout));
       document.querySelectorAll("[data-mode]").forEach(button => button.classList.toggle("active", button.dataset.mode === state.editorMode));
     }
     let swatchesBuilt = false;
@@ -1005,6 +1108,7 @@
       swatchesBuilt = true;
     }
     function render() {
+      const isKitchen = state.product === "kitchen";
       const product = catalog[state.product];
       const furnitureColor = unifiedColors.find(c => c.id === state.furnitureColor) || unifiedColors[0];
       const wallColor = unifiedColors.find(c => c.id === state.wallColor) || unifiedColors[0];
@@ -1017,7 +1121,12 @@
       const total = Math.max(32900, Math.round((product.rate * (width / 1000) * (height / product.defaultDimensions.height) * (depth / product.defaultDimensions.depth) * material.multiplier * colorMultiplier + sectionFeatures + hardwarePrice) / 100) * 100);
 
       renderEditorControls();
-      Object.entries(dimensionInputs).forEach(([key, input]) => { input.value = state.dimensions[key]; });
+      Object.entries(dimensionInputs).forEach(([key, input]) => { const lim = dimLimits(key); input.min = lim[0]; input.max = lim[1]; input.value = curDims()[key]; });
+      document.querySelectorAll("#dimensionControls label > span").forEach((span, i) => { span.textContent = isKitchen ? ["Длина", "Высота", "Глубина"][i] : ["Ширина", "Высота", "Глубина"][i]; });
+      document.getElementById("kitchenLayout").hidden = !isKitchen;
+      document.getElementById("editorTitle").textContent = isKitchen ? "Редактор кухни" : "Редактор шкафа";
+      document.getElementById("addSection").textContent = isKitchen ? "+ Модуль" : "+ Секция";
+      document.getElementById("sectionList").setAttribute("aria-label", isKitchen ? "Модули кухни" : "Секции шкафа");
       document.documentElement.style.setProperty("--furniture-color", furnitureColor.hex);
       document.documentElement.style.setProperty("--furniture-dark", furnitureColor.dark || "#6b5b4d");
       document.documentElement.style.setProperty("--wall-color", wallColor.hex);
@@ -1034,8 +1143,17 @@
       priceValue.textContent = "от " + rubles(total);
       priceDetails.textContent = product.name + " · " + state.sections.length + " секц. · " + width + " × " + depth + " × " + height + " мм · " + material.name + " · " + hardware.handles[state.hardware.handles].name + " · " + hardware.hinges[state.hardware.hinges].name;
       sceneCaption.textContent = product.name + " из " + material.name + " в оттенке «" + furnitureColor.label + "»";
+      if (isKitchen) {
+        const info = kitchenInfo(furnitureColor, material);
+        priceValue.textContent = "от " + rubles(info.total);
+        priceDetails.textContent = info.details;
+        sceneCaption.textContent = info.caption;
+      }
+      document.getElementById("priceDisclaimer").textContent = isKitchen
+        ? "Ориентир для кухни без бытовой техники. Точная смета зависит от столешницы, фурнитуры, мойки и техники, доставки и монтажа."
+        : "Ориентир для Улан‑Удэ на 2026 год с поправкой +10–15% на декор. Точная смета зависит от фурнитуры, наполнения, доставки и монтажа.";
       document.querySelectorAll(".product-tab").forEach(btn => btn.classList.toggle("active", btn.dataset.product === state.product));
-      document.querySelectorAll(".type-chip").forEach(btn => btn.classList.toggle("active", btn.dataset.wallType === state.wallType));
+      document.querySelectorAll("[data-wall-type]").forEach(btn => btn.classList.toggle("active", btn.dataset.wallType === state.wallType));
       document.querySelectorAll("[data-floor-type]").forEach(btn => btn.classList.toggle("active", btn.dataset.floorType === state.floorType));
       document.querySelectorAll("[data-light-type]").forEach(btn => btn.classList.toggle("active", btn.dataset.lightType === state.lightType));
       document.getElementById("lightRange").value = state.lightStrength;
@@ -1046,7 +1164,7 @@
       localStorage.setItem("buyantuev-editor-v1", JSON.stringify(state));
       window.dispatchEvent(new Event("cabinet:rendered"));
     }
-    function resetConfigurator() { state = { ...defaultState, sections: defaultSections.map(section => ({ ...section })), dimensions: { ...catalog.wardrobe.defaultDimensions }, camera: { ...defaultState.camera }, hardware: { ...defaultState.hardware } }; render(); }
+    function resetConfigurator() { const product = state.product; state = { ...defaultState, sections: defaultSections.map(section => ({ ...section })), dimensions: { ...catalog.wardrobe.defaultDimensions }, camera: { ...defaultState.camera }, hardware: { ...defaultState.hardware }, kitchen: freshKitchen(), product }; syncKitchenWidth(); render(); }
 
     materialSelect.addEventListener("change", () => { state.material = materialSelect.value; render(); });
     handleSelect.addEventListener("change", () => { state.hardware.handles = handleSelect.value; render(); });
@@ -1055,26 +1173,30 @@
       const button = event.target.closest("[data-mode]"); if (!button) return; state.editorMode = button.dataset.mode; if (state.editorMode === "3d") state.camera = { ...defaultState.camera }; render();
     });
     document.getElementById("addSection").addEventListener("click", () => {
+      if (state.product === "kitchen") return kitchenOp("add");
       if (state.sections.length >= 8) return;
       state.sections.push({ id: state.nextSectionId++, width: 500, shelves: 2, drawers: 0, facade: "door" });
       state.dimensions.width = Math.max(600, Math.round(state.sections.reduce((sum, section) => sum + section.width, 0) / 50) * 50);
       state.selectedSection = state.sections.length - 1; render();
     });
     document.getElementById("duplicateSection").addEventListener("click", () => {
+      if (state.product === "kitchen") return kitchenOp("dup");
       if (state.sections.length >= 8) return;
       const copy = { ...state.sections[state.selectedSection], id: state.nextSectionId++ };
       state.sections.splice(state.selectedSection + 1, 0, copy); state.selectedSection += 1;
       state.dimensions.width = Math.max(600, Math.round(state.sections.reduce((sum, section) => sum + section.width, 0) / 50) * 50); render();
     });
     document.getElementById("removeSection").addEventListener("click", () => {
+      if (state.product === "kitchen") return kitchenOp("del");
       if (state.sections.length <= 1) return;
       state.sections.splice(state.selectedSection, 1); state.selectedSection = Math.max(0, state.selectedSection - 1);
       state.dimensions.width = Math.max(600, Math.round(state.sections.reduce((sum, section) => sum + section.width, 0) / 50) * 50); render();
     });
     document.getElementById("sectionList").addEventListener("click", (event) => {
-      const button = event.target.closest("[data-section-index]"); if (!button) return; state.selectedSection = Number(button.dataset.sectionIndex); render();
+      const button = event.target.closest("[data-section-index]"); if (!button) return; if (state.product === "kitchen") state.kitchen.selected = Number(button.dataset.sectionIndex); else state.selectedSection = Number(button.dataset.sectionIndex); render();
     });
     document.getElementById("sectionSettings").addEventListener("change", (event) => {
+      if (state.product === "kitchen") return kitchenSettingsChange(event);
       const section = state.sections[state.selectedSection]; if (!section) return;
       if (event.target.id === "sectionWidth") section.width = Math.max(250, Math.min(2000, Math.round(Number(event.target.value) / 50) * 50));
       if (event.target.id === "sectionShelves") section.shelves = Math.max(0, Math.min(8, Number(event.target.value) || 0));
@@ -1083,9 +1205,13 @@
       state.dimensions.width = Math.max(600, Math.round(state.sections.reduce((sum, item) => sum + item.width, 0) / 50) * 50); render();
     });
     function setDimension(key, value) {
-      const limits = { width: [600, 4000], height: [700, 3000], depth: [300, 800] }[key];
-      state.dimensions[key] = Math.max(limits[0], Math.min(limits[1], Math.round(Number(value) / 50) * 50));
-      if (key === "width" && state.sections.length) {
+      const limits = dimLimits(key), dims = curDims();
+      dims[key] = Math.max(limits[0], Math.min(limits[1], Math.round(Number(value) / 50) * 50));
+      if (key === "width" && state.product === "kitchen") {
+        const k = state.kitchen, total = k.modules.reduce((sum, m) => sum + m.width, 0), ratio = dims.width / total;
+        k.modules.forEach(m => { m.width = Math.max(300, Math.min(1200, Math.round(m.width * ratio / 50) * 50)); });
+        syncKitchenWidth();
+      } else if (key === "width" && state.sections.length) {
         const currentTotal = state.sections.reduce((sum, section) => sum + section.width, 0);
         const ratio = state.dimensions.width / currentTotal;
         state.sections.forEach(section => { section.width = Math.max(250, Math.round(section.width * ratio / 50) * 50); });
@@ -1094,11 +1220,11 @@
     }
     document.getElementById("dimensionControls").addEventListener("click", (event) => {
       const button = event.target.closest("[data-dim]"); if (!button) return;
-      setDimension(button.dataset.dim, state.dimensions[button.dataset.dim] + Number(button.dataset.step));
+      setDimension(button.dataset.dim, curDims()[button.dataset.dim] + Number(button.dataset.step));
     });
     Object.entries(dimensionInputs).forEach(([key, input]) => {
       input.addEventListener("change", () => setDimension(key, input.value));
-      input.addEventListener("wheel", (event) => { if (document.activeElement !== input) return; event.preventDefault(); setDimension(key, state.dimensions[key] + (event.deltaY < 0 ? 50 : -50)); }, { passive: false });
+      input.addEventListener("wheel", (event) => { if (document.activeElement !== input) return; event.preventDefault(); setDimension(key, curDims()[key] + (event.deltaY < 0 ? 50 : -50)); }, { passive: false });
     });
     document.getElementById("furnitureSwatches").addEventListener("click", (event) => {
       const button = event.target.closest("[data-color]"); if (!button) return; state.furnitureColor = button.dataset.color; render();
@@ -1120,6 +1246,23 @@
       const button = event.target.closest("[data-light-type]"); if (!button) return; state.lightType = button.dataset.lightType; render();
     });
     document.getElementById("resetButton").addEventListener("click", resetConfigurator);
+    document.getElementById("productTabs").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-product]"); if (!button || !catalog[button.dataset.product] || button.dataset.product === state.product) return;
+      state.product = button.dataset.product; state.camera = { ...defaultState.camera }; render();
+    });
+    document.getElementById("kitchenLayoutChips").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-layout]"); if (!button) return;
+      const k = state.kitchen; k.layout = button.dataset.layout;
+      while (k.layout === "u" && k.modules.reduce((sum, m) => sum + m.width, 0) < 2400 && k.modules.length < 10) k.modules.push({ id: k.nextId++, width: 600, type: "base" });
+      syncKitchenWidth(); render();
+    });
+    document.getElementById("kitchenSettings").addEventListener("change", (event) => {
+      const k = state.kitchen;
+      if (event.target.id === "kitchenSide") k.side = Math.max(1200, Math.min(3600, Math.round(Number(event.target.value) / 100) * 100));
+      if (event.target.id === "kitchenCounter") k.counter = kitchenCounters[event.target.value] ? event.target.value : "laminate";
+      if (event.target.id === "kitchenUppers") k.uppers = event.target.value === "1";
+      render();
+    });
     document.querySelectorAll(".faq-item button").forEach(button => button.addEventListener("click", () => {
       const item = button.closest(".faq-item"); const wasOpen = item.classList.contains("open");
       document.querySelectorAll(".faq-item").forEach(faq => { faq.classList.remove("open"); faq.querySelector("button").setAttribute("aria-expanded", "false"); });
