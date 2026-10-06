@@ -676,6 +676,33 @@
     [hidden] { display: none !important; }
     .product-tabs { grid-template-columns: repeat(2, 1fr); }
     .editor-select, .editor-number { min-width: 0; }
+
+    /* ===== Правки по списку ===== */
+    .header-cta, .header-cta:hover { border: 0; background: var(--forest); color: #fff; }
+    .header-cta:hover { background: #214237; }
+    .hero-card { min-height: 400px; background: #f4ece0; }
+    .hero-card .hero-kitchen { position: absolute; left: 0; right: 0; top: 0; bottom: 36px; width: 100%; height: calc(100% - 36px); }
+    .hero-card .hero-cabinet { display: none; }
+    .screen-tip { display: flex; max-width: 640px; align-items: flex-start; gap: 10px; margin: 18px 0 0; padding: 12px 14px; color: var(--forest); font-size: 12.5px; font-weight: 600; line-height: 1.5; border: 1px solid #cfe0d6; border-radius: 12px; background: #eef5f0; }
+    .screen-tip svg { flex: none; margin-top: 2px; }
+    .decor-block { margin-top: 14px; }
+    .control-sub { display: block; margin: 0 0 8px; color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .02em; }
+    .decor-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+    .decor-swatch { aspect-ratio: 1; padding: 0; cursor: pointer; border: 2px solid #fff; border-radius: 50%; background-color: #ddd; background-size: cover; background-position: center; box-shadow: 0 0 0 1px #d9d0c2; transition: transform .15s, box-shadow .15s; -webkit-tap-highlight-color: transparent; }
+    .decor-swatch:hover { transform: scale(1.08); }
+    .decor-swatch.active { box-shadow: 0 0 0 2.5px var(--forest); }
+    .decor-swatch.is-none { background: var(--palette-color, #b48a64); position: relative; }
+    .decor-swatch.is-none::after { content: "∅"; position: absolute; inset: 0; display: grid; place-items: center; color: rgba(255,255,255,.9); font-size: 15px; font-weight: 800; text-shadow: 0 1px 2px rgba(0,0,0,.4); }
+    .decor-note { margin: 10px 0 0; color: var(--muted); font-size: 11.5px; line-height: 1.45; }
+    #shiftRange { width: 100%; margin: 10px 0 0; accent-color: var(--forest); }
+    .shift-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .doors-row { margin-top: 14px; }
+    .doors-row .editor-modes { grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: 759px) {
+      .hero-card { min-height: 300px; }
+      .decor-grid { grid-template-columns: repeat(6, 1fr); }
+      .screen-tip { font-size: 12px; }
+    }
   </style>
 </head>
 <body>
@@ -696,8 +723,8 @@
     <section class="hero">
       <div class="container hero-grid">
         <div class="hero-copy">
-          <span class="eyebrow">Мебель в деле с 2005 года</span>
-          <h1>Шкафы, которые <em>работают на дом</em></h1>
+          <span class="eyebrow">В деле с 2005 года</span>
+          <h1>Мебель, которая <em>работает на дом</em></h1>
           <p class="lead">Изготавливаем корпусные шкафы и кухни по вашим размерам. Настройте конфигурацию, цвет, материал и освещение — получите ориентир по цене для Улан‑Удэ.</p>
           <div class="hero-actions">
             <a class="button-primary" href="#configurator">Собрать свой вариант <span class="arrow">→</span></a>
@@ -709,9 +736,31 @@
           </div>
         </div>
         <div class="hero-card" aria-hidden="true">
-          <div class="sun"></div><div class="hero-window"></div><div class="hero-floor"></div>
-          <div class="hero-cabinet"></div><div class="hero-plant"></div><div class="hero-pot"></div>
-          <div class="hero-sticker"><b>от 32 900 ₽</b>ориентир для шкафа<br>в Улан‑Удэ · 2026</div>
+          <div class="hero-floor"></div>
+          <svg class="hero-kitchen" viewBox="0 0 600 380" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+            <defs>
+              <linearGradient id="hk-face" x1="0" x2="1"><stop offset="0" stop-color="#cfab7f"/><stop offset="1" stop-color="#b48a64"/></linearGradient>
+              <linearGradient id="hk-steel" x1="0" x2="1"><stop offset="0" stop-color="#e3e8ea"/><stop offset="1" stop-color="#b9c1c5"/></linearGradient>
+            </defs>
+            <rect x="130" y="166" width="446" height="80" fill="#efe3d2"/>
+            <g fill="url(#hk-face)" stroke="#8a6644" stroke-width="1">
+              <rect x="144" y="51" width="81" height="115"/><rect x="225" y="51" width="108" height="115"/><rect x="333" y="51" width="81" height="115"/>
+              <rect x="495" y="51" width="81" height="60"/>
+              <rect x="144" y="251" width="81" height="97"/><rect x="225" y="251" width="108" height="97"/>
+              <rect x="333" y="251" width="81" height="97"/><rect x="414" y="251" width="81" height="97"/>
+            </g>
+            <g stroke="#8a6644" stroke-width="1"><line x1="279" y1="51" x2="279" y2="166"/><line x1="279" y1="251" x2="279" y2="348"/><line x1="333" y1="287" x2="414" y2="287"/><line x1="333" y1="318" x2="414" y2="318"/><line x1="414" y1="276" x2="495" y2="276"/></g>
+            <rect x="144" y="246" width="351" height="6" fill="#ece7dc"/>
+            <rect x="144" y="348" width="432" height="14" fill="#2b2f2d"/>
+            <rect x="424" y="166" width="62" height="20" fill="#bfc7cb"/><rect x="443" y="51" width="24" height="115" fill="#cdd4d7"/>
+            <rect x="495" y="112" width="81" height="250" rx="2" fill="url(#hk-steel)" stroke="#8c969b"/><line x1="495" y1="262" x2="576" y2="262" stroke="#6f787d" stroke-width="2"/>
+            <g fill="#2b2f2d"><rect x="215" y="196" width="3" height="20" rx="1"/><rect x="232" y="196" width="3" height="20" rx="1"/><rect x="323" y="196" width="3" height="20" rx="1"/><rect x="340" y="196" width="3" height="20" rx="1"/>
+              <rect x="215" y="258" width="3" height="22" rx="1"/><rect x="232" y="258" width="3" height="22" rx="1"/><rect x="545" y="150" width="3" height="46" rx="1"/><rect x="545" y="272" width="3" height="30" rx="1"/>
+              <rect x="354" y="258" width="40" height="3" rx="1"/><rect x="354" y="294" width="40" height="3" rx="1"/><rect x="354" y="325" width="40" height="3" rx="1"/><rect x="434" y="258" width="40" height="3" rx="1"/></g>
+            <rect x="244" y="241" width="70" height="5" rx="2" fill="#aeb6ba"/><rect x="276" y="222" width="3" height="19" fill="#aeb6ba"/><rect x="276" y="222" width="22" height="3" fill="#aeb6ba"/>
+            <rect x="432" y="243" width="46" height="3" rx="1" fill="#222"/>
+          </svg>
+          <div class="hero-sticker"><b id="heroPrice">от 110 000 ₽</b>ориентир для кухни<br>в Улан‑Удэ · 2026</div>
         </div>
       </div>
     </section>
@@ -731,6 +780,7 @@
           <span class="eyebrow">Интерактивный расчёт</span>
           <h2>Шкаф или кухня<br>под ваш интерьер</h2>
           <p class="lead">Соберите конструкцию из секций, настройте наполнение и фасады, а затем оцените размеры, материалы и ориентировочную стоимость проекта.</p>
+          <p class="screen-tip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 20h8M12 16v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Лучше всего редактировать на большом экране — на компьютере или планшете: так удобнее управлять сценой и настройками. С телефона проект можно посмотреть и покрутить.</span></p>
         </div>
         <div class="configurator-shell">
           <div class="scene-area">
@@ -763,6 +813,12 @@
                 <label><span>Глубина</span><button type="button" class="stepper" data-dim="depth" data-step="-50">−</button><input id="depthInput" type="number" min="300" max="800" step="50" value="600"><button type="button" class="stepper" data-dim="depth" data-step="50">+</button></label>
               </div>
             </div>
+            <div class="control-group" id="positionGroup">
+              <span class="control-label">Положение у стены</span>
+              <div class="shift-row"><button class="type-chip" type="button" id="shiftLeft">← Влево</button><button class="type-chip" type="button" id="shiftCenter">По центру</button><button class="type-chip" type="button" id="shiftRight">Вправо →</button></div>
+              <input type="range" id="shiftRange" min="-100" max="100" step="5" value="0" aria-label="Сдвиг влево или вправо">
+              <div class="doors-row" id="doorsRow"><span class="control-sub">Двери шкафа</span><div class="editor-modes"><button class="type-chip" type="button" data-doors="closed">Закрыты</button><button class="type-chip" type="button" data-doors="open">Открыты</button></div></div>
+            </div>
             <div class="control-group" id="kitchenLayout" hidden>
               <span class="control-label">Планировка кухни</span>
               <div class="editor-modes" id="kitchenLayoutChips"><button class="type-chip" type="button" data-layout="straight">Прямая</button><button class="type-chip" type="button" data-layout="l">Угловая</button><button class="type-chip" type="button" data-layout="u">П-образная</button></div>
@@ -785,6 +841,7 @@
                 <option value="enamel">МДФ эмаль матовая</option>
                 <option value="veneer">Шпон натуральный</option>
               </select></div>
+              <div class="decor-block"><span class="control-sub">Декор Egger — текстура материала</span><div class="decor-grid" id="decorGrid"></div><p class="decor-note" id="decorNote"></p></div>
             </div>
             <div class="control-group hardware-group">
               <span class="control-label">Фурнитура</span>
@@ -906,6 +963,7 @@
     </div>
   </dialog>
 
+  <script src="textures.js"></script>
   <script>
     /* Все данные каталога находятся здесь — сайт работает без БД и внешних интеграций. */
     const catalog = {
@@ -981,10 +1039,10 @@
     };
     const defaultSections = [
       { id: 1, width: 600, shelves: 3, drawers: 0, facade: "door" },
-      { id: 2, width: 600, shelves: 2, drawers: 0, facade: "door" }
+      { id: 2, width: 600, shelves: 1, drawers: 0, rod: true, facade: "door" }
     ];
     const hardware = { handles: { basic: { name: "Базовые, чёрные", price: 0 }, profile: { name: "Профиль Gola", price: 6500 }, brass: { name: "Латунные", price: 4800 }, soft: { name: "Минималистичные", price: 2800 } }, hinges: { standard: { name: "Стандартные", price: 0 }, softclose: { name: "С доводчиком", price: 4200 }, premium: { name: "Премиум с доводчиком", price: 7900 } } };
-    const defaultState = { product: "wardrobe", material: "ldsp", furnitureColor: "natural", wallColor: "sand", wallType: "paint", floorColor: "oak", floorType: "laminate", lightType: "warm", lightStrength: 65, editorMode: "3d", selectedSection: 0, nextSectionId: 3, camera: { x: 0, y: 0, zoom: 1 }, hardware: { handles: "basic", hinges: "standard" }, sections: defaultSections, dimensions: { ...catalog.wardrobe.defaultDimensions } };
+    const defaultState = { product: "wardrobe", material: "ldsp", furnitureColor: "natural", decor: "h1145", shift: 0, doorsOpen: false, wallColor: "sand", wallType: "paint", floorColor: "oak", floorType: "laminate", lightType: "warm", lightStrength: 65, editorMode: "3d", selectedSection: 0, nextSectionId: 3, camera: { x: 0, y: 0, zoom: 1 }, hardware: { handles: "basic", hinges: "standard" }, sections: defaultSections, dimensions: { ...catalog.wardrobe.defaultDimensions } };
     let state = (() => { try { const saved = JSON.parse(localStorage.getItem("buyantuev-editor-v1")); return saved ? { ...defaultState, ...saved, hardware: { ...defaultState.hardware, ...(saved.hardware || {}) }, camera: { ...defaultState.camera, ...(saved.camera || {}) }, dimensions: { ...defaultState.dimensions, ...(saved.dimensions || {}) }, sections: Array.isArray(saved.sections) && saved.sections.length ? saved.sections : defaultSections.map(section => ({ ...section })) } : { ...defaultState, sections: defaultSections.map(section => ({ ...section })) }; } catch (error) { return { ...defaultState, sections: defaultSections.map(section => ({ ...section })) }; } })();
 
     delete state.mezzanine; delete state.corner; /* чистим старые сохранения из localStorage */
@@ -1003,7 +1061,7 @@
       const list = document.getElementById("sectionList");
       list.innerHTML = state.sections.map((section, index) => '<button type="button" class="section-tab ' + (index === state.selectedSection ? "active" : "") + '" data-section-index="' + index + '">Секция ' + (index + 1) + '</button>').join("");
       const section = state.sections[state.selectedSection];
-      document.getElementById("sectionSettings").innerHTML = '<label class="editor-field">Ширина, мм<input class="editor-number" id="sectionWidth" type="number" min="250" max="2000" step="50" value="' + section.width + '"></label><label class="editor-field">Полки<input class="editor-number" id="sectionShelves" type="number" min="0" max="8" step="1" value="' + section.shelves + '"></label><label class="editor-field">Фасад<select class="editor-select" id="sectionFacade"><option value="door" ' + (section.facade === "door" ? "selected" : "") + '>Дверь</option><option value="open" ' + (section.facade === "open" ? "selected" : "") + '>Открытая</option><option value="glass" ' + (section.facade === "glass" ? "selected" : "") + '>Стекло</option></select></label>';
+      document.getElementById("sectionSettings").innerHTML = '<label class="editor-field">Ширина, мм<input class="editor-number" id="sectionWidth" type="number" min="250" max="2000" step="50" value="' + section.width + '"></label><label class="editor-field">Полки<input class="editor-number" id="sectionShelves" type="number" min="0" max="8" step="1" value="' + section.shelves + '"></label><label class="editor-field">Ящики<input class="editor-number" id="sectionDrawers" type="number" min="0" max="6" step="1" value="' + (section.drawers || 0) + '"></label><label class="editor-field">Штанга<select class="editor-select" id="sectionRod"><option value="0"' + (section.rod ? "" : " selected") + '>Нет</option><option value="1"' + (section.rod ? " selected" : "") + '>Есть</option></select></label><label class="editor-field">Фасад<select class="editor-select" id="sectionFacade"><option value="door" ' + (section.facade === "door" ? "selected" : "") + '>Дверь</option><option value="open" ' + (section.facade === "open" ? "selected" : "") + '>Открытая</option><option value="glass" ' + (section.facade === "glass" ? "selected" : "") + '>Стекло</option></select></label>';
       document.querySelectorAll("[data-mode]").forEach(button => button.classList.toggle("active", button.dataset.mode === state.editorMode));
     }
     /* ====== Кухня ======
@@ -1028,10 +1086,10 @@
     const kitchenFull = new Set(["tall", "fridge"]);
     function freshKitchen() {
       return {
-        layout: "l", side: 2000, uppers: true, counter: "laminate", selected: 0, nextId: 6,
+        layout: "l", side: 2000, uppers: true, shift: 0, counter: "laminate", selected: 0, nextId: 6,
         dimensions: { width: 3200, height: 2300, depth: 600 },
         modules: [
-          { id: 1, width: 600, type: "base" }, { id: 2, width: 800, type: "sink" }, { id: 3, width: 600, type: "drawers" },
+          { id: 1, width: 600, type: "base" }, { id: 2, width: 800, type: "sink" }, { id: 3, width: 600, type: "drawers", drawers: 3 },
           { id: 4, width: 600, type: "hob" }, { id: 5, width: 600, type: "fridge" }
         ]
       };
@@ -1054,13 +1112,13 @@
       if (state.product === "kitchen") return { width: [state.kitchen.layout === "u" ? 2400 : 1200, 6000], height: [2000, 2700], depth: [500, 700] }[key];
       return { width: [600, 4000], height: [700, 3000], depth: [300, 800] }[key];
     }
-    function kitchenInfo(furnitureColor, material) {
-      const k = state.kitchen, d = k.dimensions, D = d.depth;
+    function kitchenInfo(furnitureColor, material, kOverride) {
+      const k = kOverride || state.kitchen, d = k.dimensions, D = d.depth;
       const sideCount = k.layout === "straight" ? 0 : k.layout === "u" ? 2 : 1;
       const backLen = k.modules.reduce((s, m) => s + m.width, 0) / 1000;
       const sideLen = Math.max(0, k.side - D) / 1000 * sideCount;
       const open = k.modules.filter(m => !kitchenFull.has(m.type)).reduce((s, m) => s + m.width, 0) / 1000;
-      const weighted = k.modules.reduce((s, m) => s + m.width / 1000 * (kitchenTypes[m.type] || kitchenTypes.base).k, 0) + sideLen * 1.05;
+      const weighted = k.modules.reduce((s, m) => s + m.width / 1000 * (kitchenTypes[m.type] || kitchenTypes.base).k, 0) + k.modules.reduce((s, m) => s + (m.type === "base" ? (Number(m.drawers) || 0) * m.width / 1000 * 0.08 : 0), 0) + sideLen * 1.05;
       const upperLen = k.uppers ? open + Math.max(0, k.side - 320) / 1000 * sideCount : 0;
       const colorMultiplier = 1 + (furnitureColor.extra || 0);
       const heightFactor = Math.max(0.5, (d.height - 1450) / 850);
@@ -1085,17 +1143,45 @@
     function kitchenSettingsChange(event) {
       const k = state.kitchen, m = k.modules[k.selected]; if (!m) return;
       if (event.target.id === "sectionWidth") m.width = Math.max(300, Math.min(1200, Math.round(Number(event.target.value) / 50) * 50));
-      if (event.target.id === "kitchenType") m.type = kitchenTypes[event.target.value] ? event.target.value : "base";
+      if (event.target.id === "kitchenType") { m.type = kitchenTypes[event.target.value] ? event.target.value : "base"; m.drawers = m.type === "drawers" ? (m.drawers || 3) : m.type === "base" ? Math.min(2, m.drawers || 0) : 0; }
+      if (event.target.id === "kitchenDrawers") { const isD = m.type === "drawers"; m.drawers = Math.max(isD ? 1 : 0, Math.min(isD ? 4 : 2, Math.round(Number(event.target.value) || 0))); }
       syncKitchenWidth(); render();
     }
     function renderEditorControls() {
       if (state.product !== "kitchen") { renderWardrobeControls(); return; }
       const k = state.kitchen, m = k.modules[k.selected] || k.modules[0];
       document.getElementById("sectionList").innerHTML = k.modules.map((item, index) => '<button type="button" class="section-tab ' + (index === k.selected ? "active" : "") + '" data-section-index="' + index + '">Модуль ' + (index + 1) + '</button>').join("");
-      document.getElementById("sectionSettings").innerHTML = '<label class="editor-field">Ширина, мм<input class="editor-number" id="sectionWidth" type="number" min="300" max="1200" step="50" value="' + m.width + '"></label><label class="editor-field">Тип модуля<select class="editor-select" id="kitchenType">' + Object.entries(kitchenTypes).map(([id, t]) => '<option value="' + id + '"' + (id === m.type ? " selected" : "") + '>' + t.name + '</option>').join("") + '</select></label>';
+      const dr = Number(m.drawers) || 0, drawersOk = m.type === "base" || m.type === "drawers";
+      document.getElementById("sectionSettings").innerHTML = '<label class="editor-field">Ширина, мм<input class="editor-number" id="sectionWidth" type="number" min="300" max="1200" step="50" value="' + m.width + '"></label><label class="editor-field">Тип модуля<select class="editor-select" id="kitchenType">' + Object.entries(kitchenTypes).map(([id, t]) => '<option value="' + id + '"' + (id === m.type ? " selected" : "") + '>' + t.name + '</option>').join("") + '</select></label>' + (drawersOk ? '<label class="editor-field">Ящики<input class="editor-number" id="kitchenDrawers" type="number" min="' + (m.type === "drawers" ? 1 : 0) + '" max="' + (m.type === "drawers" ? 4 : 2) + '" step="1" value="' + (m.type === "drawers" ? (dr || 3) : dr) + '"></label>' : "");
       document.getElementById("kitchenSettings").innerHTML = (k.layout !== "straight" ? '<label class="editor-field">Боковая сторона, мм<input class="editor-number" id="kitchenSide" type="number" min="1200" max="3600" step="100" value="' + k.side + '"></label>' : "") + '<label class="editor-field">Столешница<select class="editor-select" id="kitchenCounter">' + Object.entries(kitchenCounters).map(([id, c]) => '<option value="' + id + '"' + (id === k.counter ? " selected" : "") + '>' + c.name + '</option>').join("") + '</select></label><label class="editor-field">Верхние шкафы<select class="editor-select" id="kitchenUppers"><option value="1"' + (k.uppers ? " selected" : "") + '>Есть</option><option value="0"' + (k.uppers ? "" : " selected") + '>Нет</option></select></label>';
       document.querySelectorAll("[data-layout]").forEach(button => button.classList.toggle("active", button.dataset.layout === k.layout));
       document.querySelectorAll("[data-mode]").forEach(button => button.classList.toggle("active", button.dataset.mode === state.editorMode));
+    }
+    /* ====== Декоры, положение, двери ====== */
+    function shadeHex(hex, k) {
+      const n = parseInt(hex.slice(1), 16);
+      const c = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map(v => Math.round(v * k));
+      return "#" + c.map(v => v.toString(16).padStart(2, "0")).join("");
+    }
+    function getShift() { return Number((state.product === "kitchen" ? state.kitchen.shift : state.shift) || 0); }
+    function setShift(value) {
+      value = Math.max(-1, Math.min(1, value));
+      if (state.product === "kitchen") state.kitchen.shift = value; else state.shift = value;
+      render();
+    }
+    let decorBuilt = false;
+    function renderDecor(active) {
+      const grid = document.getElementById("decorGrid");
+      if (!grid || !window.DECORS || !window.BTex) return;
+      if (!decorBuilt) {
+        grid.innerHTML = '<button type="button" class="decor-swatch is-none" data-decor="none" title="Без текстуры — цвет из палитры" aria-label="Без текстуры, цвет из палитры"></button>' +
+          window.DECORS.map(d => '<button type="button" class="decor-swatch" data-decor="' + d.id + '" title="' + d.name + ' · ' + d.code + '" aria-label="' + d.name + ', ' + d.code + '" style="background-image:url(' + window.BTex.dataURL(d.kind, 56, d.tint, { seed: 3 }) + ')"></button>').join("");
+        decorBuilt = true;
+        const hero = document.getElementById("heroPrice");
+        if (hero) hero.textContent = "от " + rubles(kitchenInfo(unifiedColors[0], materials.ldsp, { ...freshKitchen(), layout: "straight" }).total);
+      }
+      grid.querySelectorAll("[data-decor]").forEach(button => button.classList.toggle("active", button.dataset.decor === (active ? active.id : "none")));
+      document.getElementById("decorNote").textContent = active ? active.name + " · " + active.code + " (Egger). Текстура сгенерирована для примера — в заказе уточним декор по образцам." : "Цвет из палитры ниже. Выберите декор, чтобы увидеть текстуру материала.";
     }
     let swatchesBuilt = false;
     function renderSwatches() {
@@ -1114,9 +1200,11 @@
       const wallColor = unifiedColors.find(c => c.id === state.wallColor) || unifiedColors[0];
       const floorColor = unifiedColors.find(c => c.id === state.floorColor) || unifiedColors[0];
       const material = materials[state.material];
+      const decor = state.decor && state.decor !== "none" && window.DECORS ? window.DECORS.find(d => d.id === state.decor) : null;
+      const furnitureShown = decor ? { ...furnitureColor, label: decor.name + " " + decor.code, hex: decor.tint, dark: shadeHex(decor.tint, 0.68) } : furnitureColor;
       const { width, height, depth } = state.dimensions;
       const colorMultiplier = 1 + (furnitureColor.extra || 0);
-      const sectionFeatures = state.sections.reduce((sum, section) => sum + section.shelves * 450 + (section.facade === "glass" ? 4200 : section.facade === "open" ? -900 : 0), 0);
+      const sectionFeatures = state.sections.reduce((sum, section) => sum + section.shelves * 450 + (section.drawers || 0) * 2400 + (section.rod ? 1200 : 0) + (section.facade === "glass" ? 4200 : section.facade === "open" ? -900 : 0), 0);
       const hardwarePrice = hardware.handles[state.hardware.handles].price + hardware.hinges[state.hardware.hinges].price;
       const total = Math.max(32900, Math.round((product.rate * (width / 1000) * (height / product.defaultDimensions.height) * (depth / product.defaultDimensions.depth) * material.multiplier * colorMultiplier + sectionFeatures + hardwarePrice) / 100) * 100);
 
@@ -1127,8 +1215,14 @@
       document.getElementById("editorTitle").textContent = isKitchen ? "Редактор кухни" : "Редактор шкафа";
       document.getElementById("addSection").textContent = isKitchen ? "+ Модуль" : "+ Секция";
       document.getElementById("sectionList").setAttribute("aria-label", isKitchen ? "Модули кухни" : "Секции шкафа");
-      document.documentElement.style.setProperty("--furniture-color", furnitureColor.hex);
-      document.documentElement.style.setProperty("--furniture-dark", furnitureColor.dark || "#6b5b4d");
+      document.getElementById("positionGroup").hidden = isKitchen && state.kitchen.layout !== "straight";
+      document.getElementById("doorsRow").hidden = isKitchen;
+      document.getElementById("shiftRange").value = Math.round(getShift() * 100);
+      document.querySelectorAll("[data-doors]").forEach(b => b.classList.toggle("active", (b.dataset.doors === "open") === !!state.doorsOpen));
+      renderDecor(decor);
+      document.documentElement.style.setProperty("--furniture-color", furnitureShown.hex);
+      document.documentElement.style.setProperty("--palette-color", furnitureColor.hex);
+      document.documentElement.style.setProperty("--furniture-dark", furnitureShown.dark || "#6b5b4d");
       document.documentElement.style.setProperty("--wall-color", wallColor.hex);
       document.documentElement.style.setProperty("--floor-color", floorColor.hex);
       const lightColors = { warm: "#ffc46b", neutral: "#fff9e8", cool: "#cfe5ff" };
@@ -1142,9 +1236,9 @@
       hingeSelect.value = state.hardware.hinges;
       priceValue.textContent = "от " + rubles(total);
       priceDetails.textContent = product.name + " · " + state.sections.length + " секц. · " + width + " × " + depth + " × " + height + " мм · " + material.name + " · " + hardware.handles[state.hardware.handles].name + " · " + hardware.hinges[state.hardware.hinges].name;
-      sceneCaption.textContent = product.name + " из " + material.name + " в оттенке «" + furnitureColor.label + "»";
+      sceneCaption.textContent = product.name + " из " + material.name + " в оттенке «" + furnitureShown.label + "»";
       if (isKitchen) {
-        const info = kitchenInfo(furnitureColor, material);
+        const info = kitchenInfo(furnitureShown, material);
         priceValue.textContent = "от " + rubles(info.total);
         priceDetails.textContent = info.details;
         sceneCaption.textContent = info.caption;
@@ -1164,7 +1258,7 @@
       localStorage.setItem("buyantuev-editor-v1", JSON.stringify(state));
       window.dispatchEvent(new Event("cabinet:rendered"));
     }
-    function resetConfigurator() { const product = state.product; state = { ...defaultState, sections: defaultSections.map(section => ({ ...section })), dimensions: { ...catalog.wardrobe.defaultDimensions }, camera: { ...defaultState.camera }, hardware: { ...defaultState.hardware }, kitchen: freshKitchen(), product }; syncKitchenWidth(); render(); }
+    function resetConfigurator() { const product = state.product; state = { ...defaultState, sections: defaultSections.map(section => ({ ...section })), dimensions: { ...catalog.wardrobe.defaultDimensions }, camera: { ...defaultState.camera }, hardware: { ...defaultState.hardware }, kitchen: freshKitchen(), product, decor: defaultState.decor }; syncKitchenWidth(); render(); }
 
     materialSelect.addEventListener("change", () => { state.material = materialSelect.value; render(); });
     handleSelect.addEventListener("change", () => { state.hardware.handles = handleSelect.value; render(); });
@@ -1201,6 +1295,7 @@
       if (event.target.id === "sectionWidth") section.width = Math.max(250, Math.min(2000, Math.round(Number(event.target.value) / 50) * 50));
       if (event.target.id === "sectionShelves") section.shelves = Math.max(0, Math.min(8, Number(event.target.value) || 0));
       if (event.target.id === "sectionDrawers") section.drawers = Math.max(0, Math.min(6, Number(event.target.value) || 0));
+      if (event.target.id === "sectionRod") section.rod = event.target.value === "1";
       if (event.target.id === "sectionFacade") section.facade = event.target.value;
       state.dimensions.width = Math.max(600, Math.round(state.sections.reduce((sum, item) => sum + item.width, 0) / 50) * 50); render();
     });
@@ -1227,7 +1322,7 @@
       input.addEventListener("wheel", (event) => { if (document.activeElement !== input) return; event.preventDefault(); setDimension(key, curDims()[key] + (event.deltaY < 0 ? 50 : -50)); }, { passive: false });
     });
     document.getElementById("furnitureSwatches").addEventListener("click", (event) => {
-      const button = event.target.closest("[data-color]"); if (!button) return; state.furnitureColor = button.dataset.color; render();
+      const button = event.target.closest("[data-color]"); if (!button) return; state.furnitureColor = button.dataset.color; state.decor = "none"; render();
     });
     document.getElementById("wallSwatches").addEventListener("click", (event) => {
       const button = event.target.closest("[data-color]"); if (!button) return; state.wallColor = button.dataset.color; render();
@@ -1246,6 +1341,15 @@
       const button = event.target.closest("[data-light-type]"); if (!button) return; state.lightType = button.dataset.lightType; render();
     });
     document.getElementById("resetButton").addEventListener("click", resetConfigurator);
+    document.getElementById("decorGrid").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-decor]"); if (!button) return;
+      state.decor = button.dataset.decor; render();
+    });
+    document.getElementById("shiftLeft").addEventListener("click", () => setShift(getShift() - 0.34));
+    document.getElementById("shiftRight").addEventListener("click", () => setShift(getShift() + 0.34));
+    document.getElementById("shiftCenter").addEventListener("click", () => setShift(0));
+    document.getElementById("shiftRange").addEventListener("input", (event) => setShift(Number(event.target.value) / 100));
+    document.querySelectorAll("[data-doors]").forEach(button => button.addEventListener("click", () => { state.doorsOpen = button.dataset.doors === "open"; render(); }));
     document.getElementById("productTabs").addEventListener("click", (event) => {
       const button = event.target.closest("[data-product]"); if (!button || !catalog[button.dataset.product] || button.dataset.product === state.product) return;
       state.product = button.dataset.product; state.camera = { ...defaultState.camera }; render();
