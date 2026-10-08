@@ -131,19 +131,6 @@
     });
   }
   function quartz(size, seed) {
-  
-  /* ---------- Ткань ---------- */
-  function fabric(size, seed) {
-    const n = makeNoise(seed), threads = 20;
-    return paint(size, (u, v, x, y) => {
-      const threadX = Math.sin(u * threads * 6.28318) * 0.5 + 0.5;
-      const threadY = Math.sin(v * threads * 6.28318) * 0.5 + 0.5;
-      const weave = Math.min(threadX, threadY);
-      const noise = n(u * 10, v * 10) * 0.1;
-      return 0.85 + weave * 0.1 + noise;
-    });
-  }
-
     return paint(size, (u, v, x, y) => { const b = hash(x, y, seed); return 0.93 + 0.05 * b + (hash(x, y, seed + 9) > 0.985 ? 0.05 : 0); });
   }
   /* Паркет-плетёнка: квадраты из трёх досок, чередуются поперёк */
@@ -219,7 +206,6 @@
     tile: (s, seed) => tile(s, seed),
     carpet: (s, seed) => carpet(s, seed),
     wallpaper: (s, seed) => wallpaper(s, seed)
-    fabric: (s, seed) => fabric(s, seed),
   };
   const cache = new Map();
   function canvas(kind, size, opts) {

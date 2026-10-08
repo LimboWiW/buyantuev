@@ -12,11 +12,11 @@
     dots.forEach(function (d, k) { d.classList.toggle("on", k === current); });
     count.textContent = (current + 1) + " / " + slides.length;
   }
-  function goTo(i) { var len = slides.length; if (len === 0) return; var correctedIndex = ((i % len) + len) % len; current = correctedIndex; setCurrent(correctedIndex); track.scrollTo({ left: slides[correctedIndex].offsetLeft - slides[0].offsetLeft, behavior: "smooth" }); }
+  function goTo(i) { track.scrollTo({ left: slides[Math.max(0, Math.min(slides.length - 1, i))].offsetLeft - slides[0].offsetLeft, behavior: "smooth" }); }
   var ticking = false;
   track.addEventListener("scroll", function () {
     if (ticking) return; ticking = true;
-    requestAnimationFrame(function () { var len = slides.length; if (len > 0) { var rawIndex = Math.round(track.scrollLeft / step()); var cyclicIndex = ((rawIndex % len) + len) % len; setCurrent(cyclicIndex); } ticking = false; });
+    requestAnimationFrame(function () { setCurrent(Math.round(track.scrollLeft / step())); ticking = false; });
   }, { passive: true });
   document.getElementById("worksPrev").addEventListener("click", function () { goTo(current - 1); });
   document.getElementById("worksNext").addEventListener("click", function () { goTo(current + 1); });
