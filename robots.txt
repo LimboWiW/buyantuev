@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /editor.html
+Disallow: /js/
+Disallow: /vendor/
+
+Sitemap: https://SITE-DOMAIN.ru/sitemap.xml
