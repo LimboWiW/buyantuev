@@ -115,7 +115,7 @@ function decorOf(state) {
   return state.decor && state.decor !== 'none' && window.DECORS ? window.DECORS.find(d => d.id === state.decor) || null : null;
 }
 function decorMat(decor, roughness, shade = 1) {
-  return texMat(decor.kind, new THREE.Color(decor.tint).multiplyScalar(shade), roughness, decor.kind === 'concrete' ? 0.8 : 0.5, { seed: hashStr(decor.id) % 40 + 1 });
+  return texMat(decor.kind, new THREE.Color(decor.tint).multiplyScalar(shade), roughness, decor.kind === 'concrete' ? 0.8 : (['oak', 'walnut', 'ash'].includes(decor.kind) ? 0.3 : 0.5), { seed: hashStr(decor.id) % 40 + 1 });
 }
 function uvOffsets(x, y, z) {
   return [Math.abs(Math.sin(x * 12.9898 + y * 78.233 + z * 37.719) * 43758.5453) % 1, Math.abs(Math.sin(x * 39.346 + y * 11.135 + z * 83.155) * 24634.6345) % 1];

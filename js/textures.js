@@ -61,10 +61,11 @@
     const pore = n(u * 160 + 7, v * 30, 160, 30) > o.poreCut ? o.poreDark : 1;
     return o.base * (1 - o.contrast * band) * (0.88 + 0.16 * streak) * (0.92 + 0.1 * streak2) * pore;
   }
+  /* rings — число полос на одном тайле: чем больше, тем мельче рисунок древесины */
   const WOODS = {
-    oak:    { rings: 8,  warp: 0.8, sharp: 1.8, contrast: 0.16, base: 1.04, poreCut: 0.84, poreDark: 0.92 },
-    walnut: { rings: 7,  warp: 1.2, sharp: 1.4, contrast: 0.24, base: 1.1,  poreCut: 0.86, poreDark: 0.92 },
-    ash:    { rings: 10, warp: 0.5, sharp: 2.2, contrast: 0.1,  base: 1.03, poreCut: 0.82, poreDark: 0.93 }
+    oak:    { rings: 26, warp: 0.55, sharp: 1.8, contrast: 0.13, base: 1.04, poreCut: 0.9,  poreDark: 0.95 },
+    walnut: { rings: 22, warp: 0.8,  sharp: 1.4, contrast: 0.18, base: 1.1,  poreCut: 0.9,  poreDark: 0.95 },
+    ash:    { rings: 32, warp: 0.4,  sharp: 2.2, contrast: 0.09, base: 1.03, poreCut: 0.88, poreDark: 0.96 }
   };
   function wood(size, kind, seed, vertical) {
     const o = WOODS[kind] || WOODS.oak, n = makeNoise(seed);
