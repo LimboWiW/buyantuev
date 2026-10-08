@@ -12,7 +12,7 @@
     dots.forEach(function (d, k) { d.classList.toggle("on", k === current); });
     count.textContent = (current + 1) + " / " + slides.length;
   }
-  function goTo(i) { var len = slides.length; if (len === 0) return; var correctedIndex = ((i % len) + len) % len; track.scrollTo({ left: slides[correctedIndex].offsetLeft - slides[0].offsetLeft, behavior: "smooth" }); }
+  function goTo(i) { var len = slides.length; if (len === 0) return; var correctedIndex = ((i % len) + len) % len; current = correctedIndex; setCurrent(correctedIndex); track.scrollTo({ left: slides[correctedIndex].offsetLeft - slides[0].offsetLeft, behavior: "smooth" }); }
   var ticking = false;
   track.addEventListener("scroll", function () {
     if (ticking) return; ticking = true;
