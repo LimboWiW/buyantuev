@@ -4,4 +4,4 @@ Disallow: /editor.html
 Disallow: /js/
 Disallow: /vendor/
 
-Sitemap: https://SITE-DOMAIN.ru/sitemap.xml
+Sitemap: https://buyantuevmebel.ru/sitemap.xml
